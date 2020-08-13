@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include <vector>
 
+#include <ThreadPool.h>
+
 #include "Message.h"
 #include "web_api/api_mirai_http.h"
 #include "plugins/Plugin.h"
@@ -19,6 +21,8 @@ public:
 	std::vector<Plugin*> rt_table_dynamic;
 
 private:
+
+	ThreadPool thread_pool = ThreadPool(std::thread::hardware_concurrency());
 
 };
 

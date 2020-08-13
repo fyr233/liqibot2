@@ -1,4 +1,8 @@
 ﻿#pragma once
+
+//ERROR C4996
+#define _SILENCE_CXX17_RESULT_OF_DEPRECATION_WARNING
+
 #include "MsgRouter.h"
 #include "Message.h"
 #include "web_api/api_mirai_http.h"
@@ -19,7 +23,7 @@ MsgRouter::~MsgRouter()
 
 void MsgRouter::onReceived(Message msg, QQApi* qqApi_ptr)
 {
-	msg.msgChain.print();
+	//msg.msgChain.print();
 
 	float metric_max = 0.0;
 	int max_id;
@@ -35,6 +39,11 @@ void MsgRouter::onReceived(Message msg, QQApi* qqApi_ptr)
 
 	if (metric_max >= 0.5)
 	{
-		rt_table_static[max_id]->run(msg, qqApi_ptr);
+		Plugin* p = rt_table_static[max_id];
+		thread_pool.enqueue(
+			[p, msg, qqApi_ptr] {
+				p->run(msg, qqApi_ptr);
+			}
+		);
 	}
 }
