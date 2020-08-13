@@ -1,0 +1,7 @@
+
+*.zip
+
+/.vs
+/Debug
+/include
+/x64
