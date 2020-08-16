@@ -8,12 +8,13 @@
 #include "web_api/api_mirai_http.h"
 #include "plugins/Plugin.h"
 #include "plugins/Repeat.h"
+#include "plugins/Command.h"
 
 MsgRouter::MsgRouter()
 {
 	rt_table_static = {
-		(Plugin*) new Repeat(&rt_table_dynamic),
-
+		(Plugin*) new Repeat(&rt_table_dynamic, &rt_table_static),
+		(Plugin*) new Command(&rt_table_dynamic, &rt_table_static)
 	};
 }
 

@@ -5,7 +5,8 @@
 
 #include <json/json.h>
 
-using int64 = long long;
+#include "Tools.h"
+
 
 class Group
 {
@@ -69,9 +70,10 @@ public:
 	void print();
 	Json::Value toJson();
 	static MessageChain fromJson(Json::Value v);
+	std::string toString();
 	static MessageChain fromString(std::string s);
 
-	struct AMessage
+public: struct AMessage
 	{
 		enum Type
 		{
@@ -91,7 +93,8 @@ public:
 		std::string url;
 		std::string path;
 
-
+		Json::Value toJson();
+		static AMessage fromJson(Json::Value v);
 	};
 
 	std::vector<AMessage> chain;

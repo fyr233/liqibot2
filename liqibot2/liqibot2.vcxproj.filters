@@ -39,6 +39,12 @@
     <ClCompile Include="src\plugins\Repeat.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\plugins\Command.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Tools.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\web_api\api_mirai_http.h">
@@ -60,6 +66,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\plugins\Repeat.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\plugins\Command.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Tools.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

@@ -95,6 +95,11 @@ int QQApi::release()
 	return -1;
 }
 
+int64 QQApi::sendMessage(Member member, int64 quote, std::string s)
+{
+	return sendMessage(member, quote, MessageChain::fromString(s));
+}
+
 int64 QQApi::sendMessage(Member member, int64 quote, MessageChain msgChain)
 {
 	if (member.group.id == 0)
@@ -330,29 +335,3 @@ void QQApi::onClose()
 {
 }
 
-Json::Value QQApi::parseJson(std::string s)
-{
-	bool res;
-	JSONCPP_STRING errs;
-	Json::Value root, lang, mail;
-	Json::CharReaderBuilder readerBuilder;
-
-	std::unique_ptr<Json::CharReader> const jsonReader(readerBuilder.newCharReader());
-	res = jsonReader->parse(s.c_str(), s.c_str() + s.length(), &root, &errs);
-	if (!res || !errs.empty()) {
-		std::cout << "parseJson err. " << errs << std::endl;
-	}
-
-	return root;
-}
-
-std::string QQApi::dumpsJson(Json::Value v)
-{
-	Json::StreamWriterBuilder writerBuilder;
-	writerBuilder.settings_["emitUTF8"] = true;
-	std::ostringstream os;
-	std::unique_ptr<Json::StreamWriter> jsonWriter(writerBuilder.newStreamWriter());
-	jsonWriter->write(v, &os);
-
-	return os.str();
-}

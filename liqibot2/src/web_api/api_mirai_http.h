@@ -6,6 +6,7 @@
 #include <json/json.h>
 
 #include "../Message.h"
+#include "../Tools.h"
 
 
 class QQApi
@@ -20,6 +21,7 @@ public:
 	int verify();
 	int release();
 
+	int64 sendMessage(Member member, int64 quote, std::string s);
 	int64 sendMessage(Member member, int64 quote, MessageChain msgChain);
 	int64 sendFriendMessage(int64 qq, int64 quote, MessageChain msgChain);
 	int64 sendFriendMessage(Member member, int64 quote, MessageChain msgChain);
@@ -70,8 +72,7 @@ private:
 	void onErr(std::string s);
 	void onClose();
 
-	Json::Value parseJson(std::string s);
-	std::string dumpsJson(Json::Value v);
+	
 };
 
 

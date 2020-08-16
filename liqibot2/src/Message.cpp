@@ -1,17 +1,12 @@
-﻿#include "Message.h"
+﻿#pragma once
+#include "Message.h"
 
-using hash_t = size_t;
-constexpr hash_t stringhash_prime = 0x100000001B3ull;
-constexpr hash_t stringhash_basis = 0xCBF29CE484222325ull;
-hash_t stringhash_run_time(const char* str, hash_t last_value = stringhash_basis) {
-	return *str ? stringhash_run_time(str + 1, (*str ^ last_value) * stringhash_prime) : last_value;
-}
-constexpr hash_t stringhash_compile_time(const char* str, hash_t last_value = stringhash_basis) {
-	return *str ? stringhash_compile_time(str + 1, (*str ^ last_value) * stringhash_prime) : last_value;
-}
-constexpr hash_t operator "" _hash(const char* p, size_t) {
-	return stringhash_compile_time(p);
-}
+
+
+#include "web_api/api_mirai_http.h"
+
+
+
 
 void Group::print()
 {
@@ -115,31 +110,7 @@ Json::Value MessageChain::toJson()
 
 	for (int i = 0; i < chain.size(); i++)
 	{
-		Json::Value a;
-		switch (chain[i].type)
-		{
-		case AMessage::Source:
-			a["type"] = "Source";
-			a["id"] = chain[i].id;
-			a["time"] = chain[i].time;
-			break;
-
-		case AMessage::Plain:
-			a["type"] = "Plain";
-			a["text"] = chain[i].text;
-			break;
-
-		case AMessage::Image:
-			a["type"] = "Image";
-			a["imageId"] = chain[i].imageId;
-			a["url"] = chain[i].url;
-			a["path"] = chain[i].path;
-			break;
-
-		default:
-			break;
-		}
-		v[i] = a;
+		v[i] = chain[i].toJson();
 	}
 
 	return v;
@@ -150,34 +121,33 @@ MessageChain MessageChain::fromJson(Json::Value v)
 	MessageChain m;
 	for (int i = 0; i < v.size(); i++)
 	{
-		AMessage a;
-		switch (stringhash_run_time(v[i]["type"].asString().c_str()))
+		m.chain.push_back(AMessage::fromJson(v[i]));
+	}
+
+	return m;
+}
+
+std::string MessageChain::toString()
+{
+	std::string s;
+	for (int i = 0; i < chain.size(); i++)
+	{
+		switch (chain[i].type)
 		{
-		case "Source"_hash:
-			a.type = AMessage::Source;
-			a.id = v[i]["id"].asInt64();
-			a.time = v[i]["time"].asInt64();
+		case AMessage::Plain:
+			s += chain[i].text;
 			break;
 
-		case "Plain"_hash:
-			a.type = AMessage::Plain;
-			a.text = v[i]["text"].asString();
-			break;
-
-		case "Image"_hash:
-			a.type = AMessage::Image;
-			a.imageId = v[i]["imageId"].asString();
-			a.url = v[i]["url"].asString();
-			a.path = v[i]["path"].asString();
+		case AMessage::Image:
+			s += "[b64:" + base64::encode(dumpsJson(chain[i].toJson())) + "]";
 			break;
 
 		default:
 			break;
 		}
-		m.chain.push_back(a);
 	}
 
-	return m;
+	return s;
 }
 
 MessageChain MessageChain::fromString(std::string s)
@@ -197,7 +167,27 @@ void Message::print()
 
 Json::Value Message::toJson()
 {
-	return Json::Value();
+	Json::Value v;
+	switch (type)
+	{
+	case Message::FriendMessage:
+		v["type"] = "FriendMessage";
+		v["sender"] = member.toJson();
+		v["messageChain"] = msgChain.toJson();
+		break;
+
+	case Message::GroupMessage:
+		v["type"] = "FriendMessage";
+		v["sender"] = member.toJson();
+		v["messageChain"] = msgChain.toJson();
+		break;
+		
+	default:
+		v["type"] = "None";
+		break;
+	}
+
+	return v;
 }
 
 Message Message::fromJson(Json::Value v)
@@ -207,20 +197,79 @@ Message Message::fromJson(Json::Value v)
 	{
 	case "GroupMessage"_hash:
 		m.type = Message::GroupMessage;
+		m.member = Member::fromJson(v["sender"]);
+		m.msgChain = MessageChain::fromJson(v["messageChain"]);
 		break;
 
 	case "FriendMessage"_hash:
 		m.type = Message::FriendMessage;
+		m.member = Member::fromJson(v["sender"]);
+		m.msgChain = MessageChain::fromJson(v["messageChain"]);
 		break;
 
 	default:
 		break;
 	}
 
-	m.member = Member::fromJson(v["sender"]);
-	m.msgChain = MessageChain::fromJson(v["messageChain"]);
-
 	return m;
 }
 
+Json::Value MessageChain::AMessage::toJson()
+{
+	Json::Value v;
+	switch (type)
+	{
+	case AMessage::Source:
+		v["type"] = "Source";
+		v["id"] = id;
+		v["time"] = time;
+		break;
 
+	case AMessage::Plain:
+		v["type"] = "Plain";
+		v["text"] = text;
+		break;
+
+	case AMessage::Image:
+		v["type"] = "Image";
+		v["imageId"] = imageId;
+		v["url"] = url;
+		v["path"] = path;
+		break;
+
+	default:
+		break;
+	}
+
+	return v;
+}
+
+MessageChain::AMessage MessageChain::AMessage::fromJson(Json::Value v)
+{
+	AMessage a;
+	switch (stringhash_run_time(v["type"].asString().c_str()))
+	{
+	case "Source"_hash:
+		a.type = AMessage::Source;
+		a.id = v["id"].asInt64();
+		a.time = v["time"].asInt64();
+		break;
+
+	case "Plain"_hash:
+		a.type = AMessage::Plain;
+		a.text = v["text"].asString();
+		break;
+
+	case "Image"_hash:
+		a.type = AMessage::Image;
+		a.imageId = v["imageId"].asString();
+		a.url = v["url"].asString();
+		a.path = v["path"].asString();
+		break;
+
+	default:
+		break;
+	}
+
+	return a;
+}
