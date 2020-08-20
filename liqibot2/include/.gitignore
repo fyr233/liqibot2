@@ -1,0 +1,7 @@
+
+*.zip
+
+/boost_1_73_0
+/cppcodec-master
+/jsoncpp-1.9.3
+/threadpool
