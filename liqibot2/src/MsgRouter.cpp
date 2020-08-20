@@ -20,6 +20,7 @@ MsgRouter::MsgRouter()
 
 MsgRouter::~MsgRouter()
 {
+	
 }
 
 void MsgRouter::onReceived(Message msg, QQApi* qqApi_ptr)

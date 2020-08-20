@@ -13,10 +13,9 @@ public:
 	~Repeat();
 
 	float metric(Message msg);
-
 	void run(Message msg, QQApi* qqApi_ptr);
-
 	void onCommand(Message msg, std::string s, QQApi* qqApi_ptr);
+	void onClose();
 
 private:
 

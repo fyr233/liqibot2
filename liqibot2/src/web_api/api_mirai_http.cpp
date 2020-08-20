@@ -313,7 +313,7 @@ void QQApi::startListen(std::function<void(Message msg, QQApi* qqApi)> onReceive
 		[this]() {this->onClose(); }
 	);
 	ws->start();
-	ws->run();
+	ws->run();//阻塞的
 }
 
 void QQApi::onHandshake()

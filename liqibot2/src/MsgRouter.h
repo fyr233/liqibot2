@@ -16,6 +16,7 @@ public:
 	~MsgRouter();
 
 	void onReceived(Message msg, QQApi* qqApi_ptr);
+	void onClose();
 
 	std::vector<Plugin*> rt_table_static;
 	std::vector<Plugin*> rt_table_dynamic;

@@ -163,6 +163,8 @@ void WebSocket::on_read(beast::error_code ec, std::size_t bytes_transferred)
 
 void WebSocket::on_close(beast::error_code ec)
 {
+	(this->onClose)();
+
 	if (ec)
 		return fail(ec, "close");
 
@@ -171,7 +173,7 @@ void WebSocket::on_close(beast::error_code ec)
 	// The make_printable() function helps print a ConstBufferSequence
 	std::cout << beast::make_printable(buffer_.data()) << std::endl;
 
-	(this->onClose)();
+	
 }
 
 int WebSocket::parseUrl(std::string url, std::string& host, std::string& port, std::string& path)

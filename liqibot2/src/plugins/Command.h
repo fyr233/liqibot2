@@ -12,8 +12,10 @@ public:
 	~Command();
 
 	float metric(Message msg);
-
 	void run(Message msg, QQApi* qqApi_ptr);
+	void onClose();
+
+	
 
 private:
 

@@ -2,7 +2,9 @@
 #include "Tools.h"
 
 
-
+hash_t stringhash_run_time(const char* str, hash_t last_value) {
+	return *str ? stringhash_run_time(str + 1, (*str ^ last_value) * stringhash_prime) : last_value;
+}
 
 Json::Value parseJson(std::string s)
 {
@@ -14,7 +16,8 @@ Json::Value parseJson(std::string s)
 	std::unique_ptr<Json::CharReader> const jsonReader(readerBuilder.newCharReader());
 	res = jsonReader->parse(s.c_str(), s.c_str() + s.length(), &root, &errs);
 	if (!res || !errs.empty()) {
-		std::cout << "parseJson err. " << errs << std::endl;
+		//std::cout << "parseJson err. " << errs << std::endl;
+		throw "parseJson err. " + errs;
 	}
 
 	return root;
@@ -31,6 +34,20 @@ std::string dumpsJson(Json::Value v)
 	return os.str();
 }
 
-hash_t stringhash_run_time(const char* str, hash_t last_value) {
-	return *str ? stringhash_run_time(str + 1, (*str ^ last_value) * stringhash_prime) : last_value;
+Json::Value loadJson(std::string file)
+{
+	JSONCPP_STRING errs;
+	Json::Value root, lang, mail;
+	Json::CharReaderBuilder readerBuilder;
+	readerBuilder["collectComments"] = true;
+
+	std::ifstream ifs;
+	ifs.open(file);
+	
+	if (!parseFromStream(readerBuilder, ifs, &root, &errs)) {
+		throw "parseJson err. " + errs;
+	}
+
+	return root;
 }
+

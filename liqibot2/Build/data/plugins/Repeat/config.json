@@ -1,0 +1,17 @@
+{
+	"active" : true,
+	"default" : 0.050000000000000003,
+	"group-config" : 
+	{
+		"1" : 1.0
+	},
+	"group-member-config" : 
+	{
+		"1-1" : 1.0,
+		"799733244-1325275429" : 0.5
+	},
+	"member-config" : 
+	{
+		"1" : 1.0
+	}
+}

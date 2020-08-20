@@ -78,6 +78,7 @@
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\include\boost_1_73_0;$(SolutionDir)\include\jsoncpp-1.9.3\dist\json;$(SolutionDir)\include\jsoncpp-1.9.3\dist;$(SolutionDir)\include\threadpool;$(SolutionDir)\include\cmdline-master;$(SolutionDir)\include\cppcodec-master</IncludePath>
     <LibraryPath>$(SolutionDir)\include\boost_1_73_0\stage\lib;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)Build\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -88,6 +89,7 @@
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\include\boost_1_73_0;$(SolutionDir)\include\jsoncpp-1.9.3\dist\json;$(SolutionDir)\include\jsoncpp-1.9.3\dist;$(SolutionDir)\include\threadpool;$(SolutionDir)\include\cmdline-master;$(SolutionDir)\include\cppcodec-master</IncludePath>
     <LibraryPath>$(SolutionDir)\include\boost_1_73_0\stage\lib;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)Build\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

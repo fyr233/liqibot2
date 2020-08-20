@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <vector>
 #include <functional>
@@ -27,5 +28,7 @@ constexpr hash_t operator "" _hash(const char* p, size_t) {
 }
 
 hash_t stringhash_run_time(const char* str, hash_t last_value = stringhash_basis);
+
 Json::Value parseJson(std::string s);
 std::string dumpsJson(Json::Value v);
+Json::Value loadJson(std::string file);

@@ -11,9 +11,13 @@ Repeat::Repeat()
 
 Repeat::Repeat(std::vector<Plugin*>* rt_tb_dy_ptr, std::vector<Plugin*>* rt_tb_st_ptr)
 {
+	//重要，模块名字
+	Plugin::name = "Repeat";
+
 	this->rt_tb_dy_ptr = rt_tb_dy_ptr;
 	this->rt_tb_st_ptr = rt_tb_st_ptr;
 
+	//默认config
 	std::string conf = R""(
 		{
 			"active": true,
@@ -31,6 +35,7 @@ Repeat::Repeat(std::vector<Plugin*>* rt_tb_dy_ptr, std::vector<Plugin*>* rt_tb_s
 		)"";
 
 	config = parseJson(conf);
+	loadConfig();
 }
 
 Repeat::~Repeat()
@@ -76,11 +81,11 @@ void Repeat::run(Message msg, QQApi* qqApi_ptr)
 void Repeat::onCommand(Message msg, std::string s, QQApi* qqApi_ptr)
 {
 	/*
-		example: plugins/repeat -c set -q 123456 -g 987654 -p 0.1
-				 plugins/repeat -c set --qq 123456 --group 0 --prob 0.1
-				 /plugins/repeat -c get
-				 plugins/repeat -c get --json
-				 plugins/repeat -c del
+		example: plugins/Repeat -c set -q 123456 -g 987654 -p 0.1
+				 plugins/Repeat -c set --qq 123456 --group 0 --prob 0.1
+				 /plugins/Repeat -c get
+				 plugins/Repeat -c get --json
+				 plugins/Repeat -c del
 	*/
 
 	cmdline::parser p;
@@ -164,6 +169,7 @@ void Repeat::onCommand(Message msg, std::string s, QQApi* qqApi_ptr)
 		qqApi_ptr->sendMessage(msg.member, 0,
 			"set success"
 		);
+		saveConfig();
 		break;
 
 	case "get"_hash:
@@ -241,10 +247,16 @@ void Repeat::onCommand(Message msg, std::string s, QQApi* qqApi_ptr)
 		qqApi_ptr->sendMessage(msg.member, 0,
 			"del success"
 		);
+		saveConfig();
 		break;
 
 	default:
 		break;
 	}
 
+}
+
+void Repeat::onClose()
+{
+	saveConfig();
 }
