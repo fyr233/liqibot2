@@ -12,6 +12,7 @@ Json::Value parseJson(std::string s)
 	JSONCPP_STRING errs;
 	Json::Value root, lang, mail;
 	Json::CharReaderBuilder readerBuilder;
+	readerBuilder.settings_["emitUTF8"] = true;
 
 	std::unique_ptr<Json::CharReader> const jsonReader(readerBuilder.newCharReader());
 	res = jsonReader->parse(s.c_str(), s.c_str() + s.length(), &root, &errs);
@@ -40,6 +41,7 @@ Json::Value loadJson(std::string file)
 	Json::Value root, lang, mail;
 	Json::CharReaderBuilder readerBuilder;
 	readerBuilder["collectComments"] = true;
+	readerBuilder.settings_["emitUTF8"] = true;
 
 	std::ifstream ifs;
 	ifs.open(file);

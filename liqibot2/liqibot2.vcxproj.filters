@@ -45,6 +45,9 @@
     <ClCompile Include="src\Tools.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\plugins\ScoldMe.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\web_api\api_mirai_http.h">
@@ -72,6 +75,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Tools.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\plugins\ScoldMe.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

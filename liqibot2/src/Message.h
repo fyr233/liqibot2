@@ -95,6 +95,8 @@ public: struct AMessage
 
 		Json::Value toJson();
 		static AMessage fromJson(Json::Value v);
+		std::string toString();
+		static AMessage fromString(std::string s);
 	};
 
 	std::vector<AMessage> chain;

@@ -3,8 +3,6 @@
 
 #include "cmdline.h"
 
-#include "../web_api/api_mirai_http.h"
-
 Repeat::Repeat()
 {
 }
@@ -72,7 +70,7 @@ void Repeat::run(Message msg, QQApi* qqApi_ptr)
 
 	if (dist(gen) / (float)rand_max < prob)
 	{
-		std::cout << "repeat" << msg.msgChain.toString() << "\n";
+		std::cout << "Repeat: " << msg.msgChain.toString() << "\n";
 		qqApi_ptr->sendMessage(msg.member, 0, msg.msgChain);
 	}
 	
@@ -123,6 +121,7 @@ void Repeat::onCommand(Message msg, std::string s, QQApi* qqApi_ptr)
 	catch (const std::string& e)
 	{
 		qqApi_ptr->sendMessage(msg.member, 0, e);
+		return;
 	}
 
 	auto reply = [](int64 group, int64 qq, float prob) -> std::string {

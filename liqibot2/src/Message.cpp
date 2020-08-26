@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "Message.h"
 
-
+#include <regex>
 
 #include "web_api/api_mirai_http.h"
 
@@ -139,7 +139,12 @@ std::string MessageChain::toString()
 			break;
 
 		case AMessage::Image:
-			s += "[b64:" + base64::encode(dumpsJson(chain[i].toJson())) + "]";
+		{
+			Json::Value v = chain[i].toJson();
+			v.removeMember("url");
+			v.removeMember("path");
+			s += "[b64:" + base64::encode(dumpsJson(v)) + "]";
+		}
 			break;
 
 		default:
@@ -152,12 +157,39 @@ std::string MessageChain::toString()
 
 MessageChain MessageChain::fromString(std::string s)
 {
-	MessageChain m;
-	AMessage a;
-	a.type = AMessage::Plain;
-	a.text = s;
-	m.chain.push_back(a);
-	return m;
+	MessageChain mc;
+
+	std::regex reg("\\[b64:(.*?)\\]");
+	std::smatch m;
+	auto pos = s.cbegin();
+	auto end = s.cend();
+	for (; std::regex_search(pos, end, m, reg); pos = m.suffix().first)
+	{
+		if (m.prefix().length())
+		{
+			AMessage a;
+			a.type = AMessage::Plain;
+			a.text = m.prefix().str();
+			mc.chain.push_back(a);
+		}
+
+		std::string b64decode;
+		auto d = base64::decode(m.str(1));
+		b64decode.assign(d.begin(), d.end());
+		Json::Value v = parseJson(b64decode);
+		mc.chain.push_back(AMessage::fromJson(v));
+
+	}
+	if (pos != end)
+	{
+		AMessage a;
+		a.type = AMessage::Plain;
+		a.text = std::string(pos, end);
+		mc.chain.push_back(a);
+	}
+	std::cout << mc.toJson() << "\n";
+	
+	return mc;
 }
 
 void Message::print()

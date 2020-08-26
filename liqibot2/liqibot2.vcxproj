@@ -160,6 +160,7 @@
     <ClCompile Include="src\MsgRouter.cpp" />
     <ClCompile Include="src\plugins\Command.cpp" />
     <ClCompile Include="src\plugins\Repeat.cpp" />
+    <ClCompile Include="src\plugins\ScoldMe.cpp" />
     <ClCompile Include="src\Requests.cpp" />
     <ClCompile Include="src\Tools.cpp" />
     <ClCompile Include="src\Websocket.cpp" />
@@ -171,6 +172,7 @@
     <ClInclude Include="src\plugins\Command.h" />
     <ClInclude Include="src\plugins\Plugin.h" />
     <ClInclude Include="src\plugins\Repeat.h" />
+    <ClInclude Include="src\plugins\ScoldMe.h" />
     <ClInclude Include="src\Requests.h" />
     <ClInclude Include="src\Tools.h" />
     <ClInclude Include="src\WebSocket.h" />
