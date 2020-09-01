@@ -6,13 +6,14 @@ ScoldMe::ScoldMe()
 {
 }
 
-ScoldMe::ScoldMe(std::vector<Plugin*>* rt_tb_dy_ptr, std::vector<Plugin*>* rt_tb_st_ptr)
+ScoldMe::ScoldMe(std::vector<Plugin*>* rt_tb_dy_ptr, std::vector<Plugin*>* rt_tb_st_ptr, Permission* permission_ptr)
 {
 	//重要，模块名字
 	Plugin::name = "ScoldMe";
 
 	this->rt_tb_dy_ptr = rt_tb_dy_ptr;
 	this->rt_tb_st_ptr = rt_tb_st_ptr;
+	this->permission_ptr = permission_ptr;
 
 	//默认config
 	std::string conf = R""(
@@ -102,6 +103,13 @@ void ScoldMe::onCommand(Message msg, std::string s, QQApi* qqApi_ptr)
 	switch (stringhash_run_time(p.get<std::string>("cmd").c_str()))
 	{
 	case "add"_hash:
+		if (permission_ptr->getRole(0, msg.member.id) <= 1)
+		{
+			qqApi_ptr->sendMessage(msg.member, 0,
+				u8"操作失败：权限不足"
+			);
+			break;
+		}
 		if (! p.get<std::string>("trigger").empty())
 		{
 			config["triggers"].append(p.get<std::string>("trigger"));
@@ -120,13 +128,20 @@ void ScoldMe::onCommand(Message msg, std::string s, QQApi* qqApi_ptr)
 		if (true)
 		{
 			qqApi_ptr->sendMessage(msg.member, 0,
-				config.toStyledString()
+				dumpsJson(config)
 			);
 			break;
 		}
 		break;
 
 	case "del"_hash:
+		if (permission_ptr->getRole(0, msg.member.id) <= 1)
+		{
+			qqApi_ptr->sendMessage(msg.member, 0,
+				"操作失败：权限不足"
+			);
+			break;
+		}
 		if (p.get<std::string>("trigger").size())
 		{
 			Json::Value v;

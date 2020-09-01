@@ -9,7 +9,7 @@ class Repeat: Plugin
 {
 public:
 	Repeat();
-	Repeat(std::vector<Plugin*> * rt_tb_dy_ptr, std::vector<Plugin*>* rt_tb_st_ptr);
+	Repeat(std::vector<Plugin*> * rt_tb_dy_ptr, std::vector<Plugin*>* rt_tb_st_ptr, Permission* permission_ptr);
 	~Repeat();
 
 	float metric(Message msg);

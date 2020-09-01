@@ -323,7 +323,6 @@ void QQApi::onHandshake()
 void QQApi::onMessage(std::string s)
 {
 	std::cout << s << "\n";
-	std::cout << parseJson(s) << "\n";
 	Message msg = Message::fromJson(parseJson(s));
 	(onReceived)(msg, this);
 }

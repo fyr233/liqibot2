@@ -9,7 +9,7 @@ class ScoldMe : Plugin
 {
 public:
 	ScoldMe();
-	ScoldMe(std::vector<Plugin*>* rt_tb_dy_ptr, std::vector<Plugin*>* rt_tb_st_ptr);
+	ScoldMe(std::vector<Plugin*>* rt_tb_dy_ptr, std::vector<Plugin*>* rt_tb_st_ptr, Permission* permission_ptr);
 	~ScoldMe();
 
 	float metric(Message msg);

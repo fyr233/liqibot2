@@ -8,7 +8,7 @@
 
 int main()
 {
-	system("chcp 65001"); //设置字符集
+	//system("chcp 65001"); //设置字符集
 
 	auto qqApi = QQApi();
 	auto msgRouter_ptr = new MsgRouter();

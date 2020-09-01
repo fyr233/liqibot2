@@ -7,13 +7,14 @@ Repeat::Repeat()
 {
 }
 
-Repeat::Repeat(std::vector<Plugin*>* rt_tb_dy_ptr, std::vector<Plugin*>* rt_tb_st_ptr)
+Repeat::Repeat(std::vector<Plugin*>* rt_tb_dy_ptr, std::vector<Plugin*>* rt_tb_st_ptr, Permission* permission_ptr)
 {
 	//重要，模块名字
 	Plugin::name = "Repeat";
 
 	this->rt_tb_dy_ptr = rt_tb_dy_ptr;
 	this->rt_tb_st_ptr = rt_tb_st_ptr;
+	this->permission_ptr = permission_ptr;
 
 	//默认config
 	std::string conf = R""(
@@ -142,11 +143,11 @@ void Repeat::onCommand(Message msg, std::string s, QQApi* qqApi_ptr)
 	{
 	case "set"_hash:
 		config["active"] = p.get<int>("active") ? true : false;
-		if (p.get<int64>("qq") * p.get<int64>("group"))
+		if (p.get<int64>("qq") * p.get<int64>("group"))//指定qq和group
 		{
 			config["group-member-config"][std::to_string(p.get<int64>("group")) + "-" + std::to_string(p.get<int64>("qq"))] = p.get<float>("prob");
 		}
-		else if (p.get<int64>("qq") + p.get<int64>("group") == 0)
+		else if (p.get<int64>("qq") + p.get<int64>("group") == 0)//未指定qq和group
 		{
 			if (msg.member.group.id == 0)//私聊
 			{
@@ -157,11 +158,11 @@ void Repeat::onCommand(Message msg, std::string s, QQApi* qqApi_ptr)
 				config["group-member-config"][std::to_string(msg.member.group.id) + "-" + std::to_string(msg.member.id)] = p.get<float>("prob");
 			}
 		}
-		else if (p.get<int64>("qq") == 0)
+		else if (p.get<int64>("qq") == 0)//仅指定group
 		{
 			config["group-config"][std::to_string(p.get<int64>("group"))] = p.get<float>("prob");
 		}
-		else if (p.get<int64>("group") == 0)
+		else if (p.get<int64>("group") == 0)//仅指定qq
 		{
 			config["member-config"][std::to_string(p.get<int64>("qq"))] = p.get<float>("prob");
 		}
@@ -175,7 +176,7 @@ void Repeat::onCommand(Message msg, std::string s, QQApi* qqApi_ptr)
 		if (p.exist("json"))
 		{
 			qqApi_ptr->sendMessage(msg.member, 0,
-				config.toStyledString()
+				dumpsJson(config)
 			);
 			break;
 		}

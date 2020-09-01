@@ -9,19 +9,22 @@ Command::Command()
 {
 }
 
-Command::Command(std::vector<Plugin*>* rt_tb_dy_ptr, std::vector<Plugin*>* rt_tb_st_ptr)
+Command::Command(std::vector<Plugin*>* rt_tb_dy_ptr, std::vector<Plugin*>* rt_tb_st_ptr, Permission* permission_ptr)
 {
 	//重要，模块名字
 	Plugin::name = "Command";
 
 	this->rt_tb_dy_ptr = rt_tb_dy_ptr;
 	this->rt_tb_st_ptr = rt_tb_st_ptr;
+	this->permission_ptr = permission_ptr;
 
 	//默认config
 	std::string conf = R""(
 		{
 			"commands": [
 				"config ",
+				"permission ",
+				"Permission "
 				]
 		}
 		)"";
@@ -56,6 +59,11 @@ void Command::run(Message msg, QQApi* qqApi_ptr)
 	{
 	case "config"_hash:
 		Config(msg, s, qqApi_ptr);
+		break;
+
+	case "permission"_hash:
+	case "Permission"_hash:
+		permission_ptr->onCommand(msg, s, qqApi_ptr);
 		break;
 
 	default:

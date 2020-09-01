@@ -20,6 +20,7 @@ public:
 
 	std::vector<Plugin*> rt_table_static;
 	std::vector<Plugin*> rt_table_dynamic;
+	Permission permission;
 
 private:
 

@@ -14,9 +14,9 @@
 MsgRouter::MsgRouter()
 {
 	rt_table_static = {
-		(Plugin*) new Repeat(&rt_table_dynamic, &rt_table_static),
-		(Plugin*) new Command(&rt_table_dynamic, &rt_table_static),
-		(Plugin*) new ScoldMe(&rt_table_dynamic, &rt_table_static)
+		(Plugin*) new Repeat(&rt_table_dynamic, &rt_table_static, &permission),
+		(Plugin*) new Command(&rt_table_dynamic, &rt_table_static, &permission),
+		(Plugin*) new ScoldMe(&rt_table_dynamic, &rt_table_static, &permission)
 	};
 }
 
@@ -46,7 +46,15 @@ void MsgRouter::onReceived(Message msg, QQApi* qqApi_ptr)
 		Plugin* p = rt_table_static[max_id];
 		thread_pool.enqueue(
 			[p, msg, qqApi_ptr] {
-				p->run(msg, qqApi_ptr);
+				try
+				{
+					p->run(msg, qqApi_ptr);
+				}
+				catch (const std::exception&)
+				{
+					std::cout << "plugin " + p->name + " throw an error\n";
+				}
+				
 			}
 		);
 	}
