@@ -17,10 +17,10 @@ Repeat::Repeat(std::vector<Plugin*>* rt_tb_dy_ptr, std::vector<Plugin*>* rt_tb_s
 	this->permission_ptr = permission_ptr;
 
 	//默认config
-	std::string conf = R""(
+	std::string conf = u8R""(
 		{
 			"active": true,
-			"default": 0.05,
+			"default": 0.1,
 			"group-config": {
 				"1": 1.0,
 				},
@@ -43,13 +43,6 @@ Repeat::~Repeat()
 
 float Repeat::metric(Message msg)
 {
-	if (config["active"].asBool())
-	{
-		if (msg.type == Message::FriendMessage || msg.type == Message::GroupMessage)
-		{
-			return 0.501;
-		}
-	}
 	return 0.0;
 }
 

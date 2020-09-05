@@ -160,6 +160,8 @@
     <ClCompile Include="src\MsgRouter.cpp" />
     <ClCompile Include="src\Permission.cpp" />
     <ClCompile Include="src\plugins\Command.cpp" />
+    <ClCompile Include="src\plugins\Default.cpp" />
+    <ClCompile Include="src\plugins\RandomReply.cpp" />
     <ClCompile Include="src\plugins\Repeat.cpp" />
     <ClCompile Include="src\plugins\ScoldMe.cpp" />
     <ClCompile Include="src\Requests.cpp" />
@@ -172,7 +174,9 @@
     <ClInclude Include="src\MsgRouter.h" />
     <ClInclude Include="src\Permission.h" />
     <ClInclude Include="src\plugins\Command.h" />
+    <ClInclude Include="src\plugins\Default.h" />
     <ClInclude Include="src\plugins\Plugin.h" />
+    <ClInclude Include="src\plugins\RandomReply.h" />
     <ClInclude Include="src\plugins\Repeat.h" />
     <ClInclude Include="src\plugins\ScoldMe.h" />
     <ClInclude Include="src\Requests.h" />

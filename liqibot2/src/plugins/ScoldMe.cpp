@@ -16,7 +16,7 @@ ScoldMe::ScoldMe(std::vector<Plugin*>* rt_tb_dy_ptr, std::vector<Plugin*>* rt_tb
 	this->permission_ptr = permission_ptr;
 
 	//默认config
-	std::string conf = R""(
+	std::string conf = u8R""(
 		{
 			"active": true,
 			"triggers": [
@@ -103,7 +103,7 @@ void ScoldMe::onCommand(Message msg, std::string s, QQApi* qqApi_ptr)
 	switch (stringhash_run_time(p.get<std::string>("cmd").c_str()))
 	{
 	case "add"_hash:
-		if (permission_ptr->getRole(0, msg.member.id) <= 1)
+		if (permission_ptr->getRole(0, msg.member.id) <= Permission::VIP)
 		{
 			qqApi_ptr->sendMessage(msg.member, 0,
 				u8"操作失败：权限不足"
@@ -135,7 +135,7 @@ void ScoldMe::onCommand(Message msg, std::string s, QQApi* qqApi_ptr)
 		break;
 
 	case "del"_hash:
-		if (permission_ptr->getRole(0, msg.member.id) <= 1)
+		if (permission_ptr->getRole(0, msg.member.id) <= Permission::VIP)
 		{
 			qqApi_ptr->sendMessage(msg.member, 0,
 				"操作失败：权限不足"
@@ -194,4 +194,5 @@ void ScoldMe::onCommand(Message msg, std::string s, QQApi* qqApi_ptr)
 
 void ScoldMe::onClose()
 {
+	saveConfig();
 }

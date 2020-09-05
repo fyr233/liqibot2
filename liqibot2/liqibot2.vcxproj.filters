@@ -57,6 +57,12 @@
     <ClCompile Include="src\plugins\ScoldMe.cpp">
       <Filter>源文件\plugins</Filter>
     </ClCompile>
+    <ClCompile Include="src\plugins\Default.cpp">
+      <Filter>源文件\plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="src\plugins\RandomReply.cpp">
+      <Filter>源文件\plugins</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\web_api\api_mirai_http.h">
@@ -90,6 +96,12 @@
       <Filter>头文件\plugins</Filter>
     </ClInclude>
     <ClInclude Include="src\plugins\ScoldMe.h">
+      <Filter>头文件\plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="src\plugins\Default.h">
+      <Filter>头文件\plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="src\plugins\RandomReply.h">
       <Filter>头文件\plugins</Filter>
     </ClInclude>
   </ItemGroup>

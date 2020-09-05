@@ -10,13 +10,17 @@
 #include "plugins/Repeat.h"
 #include "plugins/Command.h"
 #include "plugins/ScoldMe.h"
+#include "plugins/Default.h"
+#include "plugins/RandomReply.h"
 
 MsgRouter::MsgRouter()
 {
 	rt_table_static = {
 		(Plugin*) new Repeat(&rt_table_dynamic, &rt_table_static, &permission),
 		(Plugin*) new Command(&rt_table_dynamic, &rt_table_static, &permission),
-		(Plugin*) new ScoldMe(&rt_table_dynamic, &rt_table_static, &permission)
+		(Plugin*) new ScoldMe(&rt_table_dynamic, &rt_table_static, &permission),
+		(Plugin*) new Default(&rt_table_dynamic, &rt_table_static, &permission),
+		(Plugin*) new RandomReply(&rt_table_dynamic, &rt_table_static, &permission)
 	};
 }
 
