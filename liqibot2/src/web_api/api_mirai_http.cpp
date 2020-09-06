@@ -8,10 +8,51 @@
 
 QQApi::QQApi()
 {
+	//默认config
+	std::string conf = R""(
+		{
+			"qq": 2155679839,
+			"host": "localhost",
+			"port": 8080,
+			"authKey": "123456789"
+		}
+		)"";
+
+	config = parseJson(conf);
+	loadConfig();
+	saveConfig();
+
+	qq = config["qq"].asInt64();
+	host = config["host"].asString();
+	port = config["port"].asInt();
+	authKey = config["authKey"].asString();
+	http_url = std::string("http://") + host + ":" + std::to_string(port);
+	ws_url = std::string("ws://") + host + ":" + std::to_string(port);
 }
 
 QQApi::~QQApi()
 {
+}
+
+void QQApi::saveConfig()
+{
+	std::ofstream config_file(config_path);
+	config_file << dumpsJson(config);
+	config_file.close();
+}
+
+void QQApi::loadConfig()
+{
+	try
+	{
+		config = loadJson(config_path);
+	}
+	catch (const std::string& e)//解析失败，使用默认config
+	{
+		std::cout << "Load " + config_path + " failed.\n"
+			<< e
+			<< "Using default config" << "\n\n";
+	}
 }
 
 Json::Value QQApi::about()

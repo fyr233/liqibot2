@@ -60,8 +60,8 @@ inline void Plugin::loadConfig()
 	catch (const std::string& e)//解析失败，使用默认config
 	{
 		std::cout << "Load " + std::string("data/plugins/") + name + "/config.json failed.\n"
-			<< e << "\n"
-			<< "Using default config" << "\n";
+			<< e
+			<< "Using default config" << "\n\n";
 	}
 }
 

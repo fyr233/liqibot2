@@ -15,6 +15,9 @@ public:
 	QQApi();
 	~QQApi();
 
+	void saveConfig();
+	void loadConfig();
+
 	Json::Value about();
 	int connect();
 	int auth();
@@ -55,13 +58,16 @@ public:
 
 	void startListen(std::function<void(Message msg, QQApi* qqApi)> onReceived);
 
-	int port = 8080;
-	std::string host = "localhost";
-	std::string http_url = std::string("http://") + host + ":" + std::to_string(port);
-	std::string ws_url = std::string("ws://") + host + ":" + std::to_string(port);
-	std::string authKey = "123456789";
+	int port;
+	std::string host;
+	std::string http_url;
+	std::string ws_url;
+	std::string authKey;
 	std::string sessionKey = "";
-	int64 qq = 2155679839;
+	int64 qq;
+
+	Json::Value config;
+	std::string config_path = "data/QQApi.json";
 
 
 private:
