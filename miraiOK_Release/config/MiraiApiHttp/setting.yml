@@ -1,0 +1,31 @@
+cors: 
+  - *
+host: 0.0.0.0
+port: 8080
+authKey: 123456789
+cacheSize: 4096
+enableWebsocket: true
+report: 
+  enable: true
+  groupMessage: 
+    report: true
+  friendMessage: 
+    report: true
+  tempMessage: 
+    report: true
+  eventMessage: 
+    report: true
+  destinations: []
+  extraHeaders: 
+{}
+
+heartbeat: 
+  enable: true
+  delay: 1000
+  period: 15000
+  destinations: []
+  extraBody: 
+{}
+
+  extraHeaders: 
+{}
