@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <string>
 #include <iostream>
+#include <vector>
 
 class Requests
 {
@@ -13,6 +14,8 @@ public:
 
 	int code = -1;
 	std::string text = "";
+	//std::vector<unsigned char> content;
+	std::string content_type = "";
 
 private:
 

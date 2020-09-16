@@ -67,16 +67,24 @@ void Default::run(Message msg, QQApi* qqApi_ptr)
 			{
 				randomReply_ptr = (*rt_tb_st_ptr)[i];
 			}
+			else if ((*rt_tb_st_ptr)[i]->name == "Setu")
+			{
+				setu_ptr = (*rt_tb_st_ptr)[i];
+			}
 		}
 	}
+
 	if (dist(gen) / (float)rand_max < config["Repeat-config"]["prob"].asFloat())
 	{
 		repeat_ptr->run(msg, qqApi_ptr);
 	}
+
 	if (dist(gen) / (float)rand_max < config["RandomReply-config"]["prob"].asFloat())
 	{
 		randomReply_ptr->run(msg, qqApi_ptr);
 	}
+
+	setu_ptr->run(msg, qqApi_ptr);
 }
 
 void Default::onCommand(Message msg, std::string s, QQApi* qqApi_ptr)

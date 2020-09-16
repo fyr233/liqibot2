@@ -63,6 +63,12 @@
     <ClCompile Include="src\plugins\RandomReply.cpp">
       <Filter>源文件\plugins</Filter>
     </ClCompile>
+    <ClCompile Include="src\plugins\Setu.cpp">
+      <Filter>源文件\plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SubProcess.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\web_api\api_mirai_http.h">
@@ -103,6 +109,12 @@
     </ClInclude>
     <ClInclude Include="src\plugins\RandomReply.h">
       <Filter>头文件\plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="src\plugins\Setu.h">
+      <Filter>头文件\plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SubProcess.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

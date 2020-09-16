@@ -68,6 +68,7 @@ Requests Requests::get(std::string url, std::string params)
 
 		r.code = (int)res.result();
 		r.text = beast::buffers_to_string(res.body().data());
+		r.content_type = res.at(http::field::content_type).to_string();
 
 		// Gracefully close the socket
 		beast::error_code ec;

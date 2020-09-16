@@ -2,6 +2,7 @@
 *.zip
 
 /boost_1_73_0
+/boost_1_74_0
 /cppcodec-master
 /jsoncpp-1.9.3
-/threadpool
+/ThreadPool-master

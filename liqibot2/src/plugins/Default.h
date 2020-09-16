@@ -26,4 +26,5 @@ private:
 
 	Plugin* repeat_ptr;
 	Plugin* randomReply_ptr;
+	Plugin* setu_ptr;
 };

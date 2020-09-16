@@ -32,3 +32,11 @@ hash_t stringhash_run_time(const char* str, hash_t last_value = stringhash_basis
 Json::Value parseJson(std::string s);
 std::string dumpsJson(Json::Value v);
 Json::Value loadJson(std::string file);
+
+std::vector<std::string> splitString(const std::string& s, const std::string& spliter);
+
+std::string utf8_to_ansi(std::string);
+std::string ansi_to_utf8(std::string);
+char* utf8_to_ansi(char*);
+char* ansi_to_utf8(char*);
+
