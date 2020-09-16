@@ -1,6 +1,8 @@
 #include "Setu.h"
 
 #include <fstream>
+#include <direct.h>  
+#include <stdio.h>
 
 #include "cmdline.h"
 #include "../SubProcess.h"
@@ -77,7 +79,7 @@ void Setu::run(Message msg, QQApi* qqApi_ptr)
 			{
 				//发色图
 
-				//调用SelectSetu.py，返回文件名，以换行分隔
+				//调用SelectSetu.py，返回相对路径的文件名，以换行分隔
 				std::string ans = SubProcess::popen("python data/plugins/Setu/SelectSetu.py");
 
 				//构造图片消息
@@ -87,7 +89,8 @@ void Setu::run(Message msg, QQApi* qqApi_ptr)
 				{
 					MessageChain::AMessage a;
 					a.type = MessageChain::AMessage::Image;
-					a.path = "data/plugins/Setu/image/" + imgfile;
+					a.path = imgfile;
+					
 					mc.chain.push_back(a);
 				}
 
