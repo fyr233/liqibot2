@@ -42,6 +42,12 @@ Setu::~Setu()
 
 float Setu::metric(Message msg)
 {
+	/*
+	Setu模块有两种消息入口，
+	1.遇到色图触发词，返回metric 1.0
+	2.通过Default模块进入，执行色图检测
+	*/
+
 	//发色图
 	//判断是否是色图触发词
 	if (config["active"].asBool())

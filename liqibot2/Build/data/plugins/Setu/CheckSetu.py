@@ -102,11 +102,11 @@ def Check_Baidu():
                 print('色图！', end='')
                 saveImg(imgurl)
                 break
-            elif each['class_name']=='一般正常' and each['probability']>0.95:
+            elif each['class_name']=='一般正常' and each['probability']>1.0:
                 print('色图！', end='')
                 saveImg(imgurl)
                 break
-            elif each['class_name']=='卡通正常' and each['probability']>0.95:
+            elif each['class_name']=='卡通正常' and each['probability']>1.0:
                 print('色图！', end='')
                 saveImg(imgurl)
                 break
