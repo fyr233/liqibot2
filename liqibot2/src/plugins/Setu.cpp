@@ -1,4 +1,4 @@
-#include "Setu.h"
+ï»¿#include "Setu.h"
 
 #include <fstream>
 #include <direct.h>  
@@ -14,19 +14,19 @@ Setu::Setu()
 
 Setu::Setu(std::vector<Plugin*>* rt_tb_dy_ptr, std::vector<Plugin*>* rt_tb_st_ptr, Permission* permission_ptr)
 {
-	//ÖØÒª£¬Ä£¿éÃû×Ö
+	//é‡è¦ï¼Œæ¨¡å—åå­—
 	Plugin::name = "Setu";
 
 	this->rt_tb_dy_ptr = rt_tb_dy_ptr;
 	this->rt_tb_st_ptr = rt_tb_st_ptr;
 	this->permission_ptr = permission_ptr;
 
-	//Ä¬ÈÏconfig
+	//é»˜è®¤config
 	std::string conf = u8R""(
 		{
 			"active": true,
 			"triggers": [
-				"É«Í¼"
+				"è‰²å›¾"
 				],
 			"max-QPS": 20
 		}
@@ -43,13 +43,13 @@ Setu::~Setu()
 float Setu::metric(Message msg)
 {
 	/*
-	SetuÄ£¿éÓĞÁ½ÖÖÏûÏ¢Èë¿Ú£¬
-	1.Óöµ½É«Í¼´¥·¢´Ê£¬·µ»Ømetric 1.0
-	2.Í¨¹ıDefaultÄ£¿é½øÈë£¬Ö´ĞĞÉ«Í¼¼ì²â
+	Setuæ¨¡å—æœ‰ä¸¤ç§æ¶ˆæ¯å…¥å£ï¼Œ
+	1.é‡åˆ°è‰²å›¾è§¦å‘è¯ï¼Œè¿”å›metric 1.0
+	2.é€šè¿‡Defaultæ¨¡å—è¿›å…¥ï¼Œæ‰§è¡Œè‰²å›¾æ£€æµ‹
 	*/
 
-	//·¢É«Í¼
-	//ÅĞ¶ÏÊÇ·ñÊÇÉ«Í¼´¥·¢´Ê
+	//å‘è‰²å›¾
+	//åˆ¤æ–­æ˜¯å¦æ˜¯è‰²å›¾è§¦å‘è¯
 	if (config["active"].asBool())
 	{
 		if (msg.type == Message::FriendMessage || msg.type == Message::GroupMessage)
@@ -72,7 +72,7 @@ float Setu::metric(Message msg)
 
 void Setu::run(Message msg, QQApi* qqApi_ptr)
 {
-	//ÅĞ¶ÏÊÇ·ñÊÇÉ«Í¼´¥·¢´Ê
+	//åˆ¤æ–­æ˜¯å¦æ˜¯è‰²å›¾è§¦å‘è¯
 	if (msg.type == Message::FriendMessage || msg.type == Message::GroupMessage)
 	{
 		std::string s = msg.msgChain.toString();
@@ -83,12 +83,12 @@ void Setu::run(Message msg, QQApi* qqApi_ptr)
 			//std::cout << s << "\n" << command << "\n" << (s == command) << "\n";
 			if (s == command)
 			{
-				//·¢É«Í¼
+				//å‘è‰²å›¾
 
-				//µ÷ÓÃSelectSetu.py£¬·µ»ØÏà¶ÔÂ·¾¶µÄÎÄ¼şÃû£¬ÒÔ»»ĞĞ·Ö¸ô
+				//è°ƒç”¨SelectSetu.pyï¼Œè¿”å›ç›¸å¯¹è·¯å¾„çš„æ–‡ä»¶åï¼Œä»¥æ¢è¡Œåˆ†éš”
 				std::string ans = SubProcess::popen("python data/plugins/Setu/SelectSetu.py");
 
-				//¹¹ÔìÍ¼Æ¬ÏûÏ¢
+				//æ„é€ å›¾ç‰‡æ¶ˆæ¯
 				auto imgfilelist = splitString(ans, "\n");
 				MessageChain mc;
 				for (auto imgfile : imgfilelist)
@@ -100,7 +100,7 @@ void Setu::run(Message msg, QQApi* qqApi_ptr)
 					mc.chain.push_back(a);
 				}
 
-				//·¢ËÍÏûÏ¢
+				//å‘é€æ¶ˆæ¯
 				qqApi_ptr->sendMessage(msg.member, 0, mc);
 
 				return ;
@@ -108,17 +108,17 @@ void Setu::run(Message msg, QQApi* qqApi_ptr)
 		}
 	}
 
-	//²»ÊÇÉ«Í¼´¥·¢´Ê£¬Ö´ĞĞÉ«Í¼¼ì²â
-	//±éÀúÏûÏ¢Á´
+	//ä¸æ˜¯è‰²å›¾è§¦å‘è¯ï¼Œæ‰§è¡Œè‰²å›¾æ£€æµ‹
+	//éå†æ¶ˆæ¯é“¾
 	for (int i = 0; i < msg.msgChain.chain.size(); i++)
 	{
 		if (msg.msgChain.chain[i].type == MessageChain::AMessage::Image)
 		{
-			//»ñÈ¡url
+			//è·å–url
 			std::string url = msg.msgChain.chain[i].url;
-			//»ñÈ¡imageId
+			//è·å–imageId
 			std::string imageId = msg.msgChain.chain[i].imageId;
-			//ÔËĞĞCheckSetu.py£¬´«ÈëurlºÍimgid
+			//è¿è¡ŒCheckSetu.pyï¼Œä¼ å…¥urlå’Œimgid
 			std::string ans = SubProcess::popen("python data/plugins/Setu/CheckSetu.py \"" + url + "\" " + imageId);
 			if (ans.size() > 0)
 			{
@@ -133,12 +133,12 @@ void Setu::run(Message msg, QQApi* qqApi_ptr)
 void Setu::onCommand(Message msg, std::string s, QQApi* qqApi_ptr)
 {
 	/*
-		example: plugins/Setu -c add -t É«Í¼£¡
-				 plugins/ScoldMe -c add -i [Í¼Æ¬]
+		example: plugins/Setu -c add -t è‰²å›¾ï¼
+				 plugins/ScoldMe -c add -i [å›¾ç‰‡]
 				 /plugins/ScoldMe -c get
 				 plugins/ScoldMe -c get --json
-				 plugins/ScoldMe -c del -t ÂîÎÒ£¡
-				 plugins/ScoldMe -c del -i [Í¼Æ¬]
+				 plugins/ScoldMe -c del -t éª‚æˆ‘ï¼
+				 plugins/ScoldMe -c del -i [å›¾ç‰‡]
 	*/
 
 	cmdline::parser p;
@@ -167,7 +167,7 @@ void Setu::onCommand(Message msg, std::string s, QQApi* qqApi_ptr)
 		if (permission_ptr->getRole(0, msg.member.id) <= Permission::DefaultRole)
 		{
 			qqApi_ptr->sendMessage(msg.member, 0,
-				u8"²Ù×÷Ê§°Ü£ºÈ¨ÏŞ²»×ã"
+				u8"æ“ä½œå¤±è´¥ï¼šæƒé™ä¸è¶³"
 			);
 			break;
 		}
@@ -177,16 +177,19 @@ void Setu::onCommand(Message msg, std::string s, QQApi* qqApi_ptr)
 		}
 		if (!p.get<std::string>("image").empty())
 		{
-			std::string b64 = p.get<std::string>("reply");
+			std::string b64 = p.get<std::string>("image");
 			MessageChain mc = MessageChain::fromString(b64);
-			if (mc.chain[0].type == MessageChain::AMessage::Image)
+			for (int i = 0; i < mc.chain.size(); i++)
 			{
-				//ÏÂÔØÍ¼Æ¬
-				Requests r = Requests::get(mc.chain[0].url);
+				if (mc.chain[i].type == MessageChain::AMessage::Image)
+				{
+					//ä¸‹è½½å›¾ç‰‡
+					Requests r = Requests::get(mc.chain[i].url);
 
-				std::ofstream outfile(mc.chain[0].id + "." + r.content_type.substr(6));
-				outfile << r.text;
-				outfile.close();
+					std::ofstream outfile(mc.chain[i].id + "." + r.content_type.substr(6));
+					outfile << r.text;
+					outfile.close();
+				}
 			}
 		}
 		qqApi_ptr->sendMessage(msg.member, 0,
@@ -209,7 +212,7 @@ void Setu::onCommand(Message msg, std::string s, QQApi* qqApi_ptr)
 		if (permission_ptr->getRole(0, msg.member.id) <= Permission::DefaultRole)
 		{
 			qqApi_ptr->sendMessage(msg.member, 0,
-				"²Ù×÷Ê§°Ü£ºÈ¨ÏŞ²»×ã"
+				"æ“ä½œå¤±è´¥ï¼šæƒé™ä¸è¶³"
 			);
 			break;
 		}
@@ -237,7 +240,7 @@ void Setu::onCommand(Message msg, std::string s, QQApi* qqApi_ptr)
 		if (p.get<std::string>("image").size())
 		{
 			qqApi_ptr->sendMessage(msg.member, 0,
-				"´Ë¹¦ÄÜÎ´Íê³É"
+				"æ­¤åŠŸèƒ½æœªå®Œæˆ"
 			);
 		}
 		saveConfig();
