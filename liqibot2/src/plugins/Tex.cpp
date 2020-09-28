@@ -43,6 +43,10 @@ float Tex::metric(Message msg)
 		if (msg.type == Message::FriendMessage || msg.type == Message::GroupMessage)
 		{
 			std::string s = msg.msgChain.toString();
+			if (s.size() < 1)
+			{
+				return 0.0f;
+			}
 
 			for (int i = 0; i < config["triggers"].size(); i++)
 			{
