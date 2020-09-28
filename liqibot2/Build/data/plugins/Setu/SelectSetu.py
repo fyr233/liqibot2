@@ -1,3 +1,11 @@
+'''
+useage:
+    SelectSetu.py"
+output:
+    Setu/xxxxxxx.jpg
+
+'''
+
 import os
 import random
 

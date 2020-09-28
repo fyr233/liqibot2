@@ -13,6 +13,7 @@
 #include "plugins/Default.h"
 #include "plugins/RandomReply.h"
 #include "plugins/Setu.h"
+#include "plugins/Tex.h"
 
 MsgRouter::MsgRouter()
 {
@@ -22,7 +23,8 @@ MsgRouter::MsgRouter()
 		(Plugin*) new ScoldMe(&rt_table_dynamic, &rt_table_static, &permission),
 		(Plugin*) new Default(&rt_table_dynamic, &rt_table_static, &permission),
 		(Plugin*) new RandomReply(&rt_table_dynamic, &rt_table_static, &permission),
-		(Plugin*) new Setu(&rt_table_dynamic, &rt_table_static, &permission)
+		(Plugin*) new Setu(&rt_table_dynamic, &rt_table_static, &permission),
+		(Plugin*) new Tex(&rt_table_dynamic, &rt_table_static, &permission)
 	};
 }
 

@@ -120,7 +120,7 @@ void Setu::run(Message msg, QQApi* qqApi_ptr)
 			std::string url = msg.msgChain.chain[i].url;
 			//获取imageId
 			std::string imageId = msg.msgChain.chain[i].imageId;
-			//运行CheckSetu.py，传入url和imgid
+			//调用CheckSetu.py，传入url和imgid
 			std::string ans = SubProcess::popen("python data/plugins/Setu/CheckSetu.py \"" + url + "\" " + imageId);
 			if (ans.size() > 0)
 			{
