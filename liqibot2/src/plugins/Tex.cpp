@@ -23,7 +23,7 @@ Tex::Tex(std::vector<Plugin*>* rt_tb_dy_ptr, std::vector<Plugin*>* rt_tb_st_ptr,
 			"triggers": [
 				"tex",
                 "latex"
-				],
+				]
 		}
 		)"";
 
@@ -62,7 +62,7 @@ void Tex::run(Message msg, QQApi* qqApi_ptr)
 {
 	std::string s = msg.msgChain.toString();
 	std::string tex = s.substr(s.find('\r') + 1);
-	std::cout << tex << "\n";
+	//std::cout << tex << "\n";
 
 	//调用Tex2Image.py，传入tex，返回png路径
 	std::string ans = SubProcess::popen("python data/plugins/Tex/Tex2Image.py \"" + tex + "\"");

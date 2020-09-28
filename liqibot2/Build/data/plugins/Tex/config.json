@@ -1,0 +1,8 @@
+{
+    "active": true,
+    "TexDir": "../../miraiOK_Release/data/MiraiApiHttp/images/Tex/",
+    "triggers": [
+        "tex",
+        "latex"
+        ]
+}
