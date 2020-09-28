@@ -82,37 +82,52 @@ void Command::Config(Message msg, std::string s, QQApi* qqApi_ptr)
 	/*
 		example: config plugins/Repeat -c set -q 123456 -g 987654 -p 0.1
 				 config plugins/Repeat -c set --qq 123456 --group 0 --prob 0.1
-				 config /plugins/Repeat -c get
+				 config plugins/Repeat -c get
 				 config plugins/Repeat -c get --json
-				 config plugins/Repeat - c del 
+				 config plugins/Repeat -c del 
+				 config reload plugins/Repeat
 	*/					
+	//已放弃对 /plugins/.. 的兼容
 
-	std::string m = s.substr(7);	//plugins/Repeat -c set -q 123456 -g 987654 -p 0.1
-	int idx = m.find(" ");			//
-	m = m.substr(0, idx);			//plugins/Repeat
-	if (m[0] == '/')
+	std::vector<std::string> words = splitString(s, " ");
+	if (words.size() < 3)
 	{
-		m = m.substr(1);//开头如果有'/'，去掉
+		qqApi_ptr->sendMessage(msg.member, 0, u8"config: 不完整的指令");
+		return;
 	}
-	idx = m.find("/");
-	std::string n = m.substr(idx + 1);	//Repeat
-	m = m.substr(0, idx);			//plugins
 
-	switch (stringhash_run_time(m.c_str()))
+	std::string word1p1 = splitString(words[1], "/")[0];	// m = plugins 或 reload，有可能为空
+	switch (stringhash_run_time(word1p1.c_str()))
 	{
 	case "plugins"_hash:
 	case "Plugins"_hash:
+	{
+		std::string mdl = splitString(words[1], "/")[1];	// n = Repeat，若越界则崩溃
 		for (int i = 0; i < (*rt_tb_st_ptr).size(); i++)
 		{
-			if ((*rt_tb_st_ptr)[i]->name == n)
+			if ((*rt_tb_st_ptr)[i]->name == mdl)
 			{
 				(*rt_tb_st_ptr)[i]->onCommand(msg, s.substr(7), qqApi_ptr);
 			}
 		}
 		break;
+	}
+	case "reload"_hash:
+	{
+		std::string mdl = splitString(words[2], "/")[1];	// n = Repeat，若越界则崩溃
+		for (int i = 0; i < (*rt_tb_st_ptr).size(); i++)
+		{
+			if ((*rt_tb_st_ptr)[i]->name == mdl)
+			{
+				(*rt_tb_st_ptr)[i]->loadConfig();
+				qqApi_ptr->sendMessage(msg.member, 0, u8"config reload " + (*rt_tb_st_ptr)[i]->name + " success");
+			}
+		}
+		break;
+	}
 
 	default:
-		qqApi_ptr->sendMessage(msg.member, 0, "config: unknown module: " + m);
+		qqApi_ptr->sendMessage(msg.member, 0, u8"config: 未知的指令");
 		break;
 	}
 }

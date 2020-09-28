@@ -1,4 +1,5 @@
 {
+	"SetuDir" : "../../miraiOK_Release/data/MiraiApiHttp/images/Setu/",
 	"active" : true,
 	"max-QPS" : 20,
 	"triggers" : 

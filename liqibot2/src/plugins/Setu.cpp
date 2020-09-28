@@ -25,6 +25,7 @@ Setu::Setu(std::vector<Plugin*>* rt_tb_dy_ptr, std::vector<Plugin*>* rt_tb_st_pt
 	std::string conf = u8R""(
 		{
 			"active": true,
+			"SetuDir": "../../miraiOK_Release/data/MiraiApiHttp/images/Setu/",
 			"triggers": [
 				"色图"
 				],
@@ -102,6 +103,7 @@ void Setu::run(Message msg, QQApi* qqApi_ptr)
 
 				//发送消息
 				qqApi_ptr->sendMessage(msg.member, 0, mc);
+				std::cout << "Setu: " << mc.toString() << "\n";
 
 				return ;
 			}
@@ -183,12 +185,22 @@ void Setu::onCommand(Message msg, std::string s, QQApi* qqApi_ptr)
 			{
 				if (mc.chain[i].type == MessageChain::AMessage::Image)
 				{
-					//下载图片
-					Requests r = Requests::get(mc.chain[i].url);
+					for (int j = 0; j < msg.msgChain.chain.size(); j++)
+					{
+						if (msg.msgChain.chain[j].type == MessageChain::AMessage::Image && msg.msgChain.chain[j].imageId == mc.chain[i].imageId)
+						{
+							//下载图片
+							Requests r = Requests::get(msg.msgChain.chain[j].url);
 
-					std::ofstream outfile(mc.chain[i].id + "." + r.content_type.substr(6));
-					outfile << r.text;
-					outfile.close();
+							std::cout << msg.msgChain.chain[j].toJson() << "\n";
+							std::cout << "\n" << r.text << "\n";
+							std::ofstream outfile(config["SetuDir"].asString() + msg.msgChain.chain[j].imageId + "." + r.content_type.substr(6));
+							outfile << r.text;
+							outfile.close();
+
+							break;
+						}
+					}
 				}
 			}
 		}
@@ -212,7 +224,7 @@ void Setu::onCommand(Message msg, std::string s, QQApi* qqApi_ptr)
 		if (permission_ptr->getRole(0, msg.member.id) <= Permission::DefaultRole)
 		{
 			qqApi_ptr->sendMessage(msg.member, 0,
-				"操作失败：权限不足"
+				u8"操作失败：权限不足"
 			);
 			break;
 		}
@@ -240,7 +252,7 @@ void Setu::onCommand(Message msg, std::string s, QQApi* qqApi_ptr)
 		if (p.get<std::string>("image").size())
 		{
 			qqApi_ptr->sendMessage(msg.member, 0,
-				"此功能未完成"
+				u8"此功能未完成"
 			);
 		}
 		saveConfig();

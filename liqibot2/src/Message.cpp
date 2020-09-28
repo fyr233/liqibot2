@@ -187,7 +187,7 @@ MessageChain MessageChain::fromString(std::string s)
 		a.text = std::string(pos, end);
 		mc.chain.push_back(a);
 	}
-	std::cout << dumpsJson(mc.toJson()) << "\n";
+	//std::cout << dumpsJson(mc.toJson()) << "\n";
 	
 	return mc;
 }
