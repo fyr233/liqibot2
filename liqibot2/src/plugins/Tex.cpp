@@ -52,7 +52,7 @@ float Tex::metric(Message msg)
 			{
 				std::string command = config["triggers"][i].asString();
 				//std::cout << s << "\n" << command << "\n" << (s == command) << "\n";
-				if (splitString(s, "\r")[0] == command)
+				if (s.substr(0, s.find_first_of("\r\n")) == command)
 				{
 					return 1.0;
 				}
@@ -65,7 +65,7 @@ float Tex::metric(Message msg)
 void Tex::run(Message msg, QQApi* qqApi_ptr)
 {
 	std::string s = msg.msgChain.toString();
-	std::string tex = s.substr(s.find('\r') + 1);
+	std::string tex = s.substr(s.find_first_of("\r\n") + 1);
 	//std::cout << tex << "\n";
 
 	//调用Tex2Image.py，传入tex，返回png路径
