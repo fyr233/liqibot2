@@ -1,12 +1,23 @@
 {
-	"SetuDir" : "../../miraiOK_Release/data/MiraiApiHttp/images/Setu/",
 	"active" : true,
 	"max-QPS" : 20,
+	"recall-delay" : 90,
 	"triggers" : 
 	[
 		"色图",
 		"色图！",
 		"涩图",
-		"fhy"
+		"色图来",
+		"[b64:ewoJImltYWdlSWQiIDogIntCNDA3RjcwOC1BMkM2LUE1MDYtMzQyMC05OERGN0NBQzRBNTd9Lm1pcmFpIiwKCSJ0eXBlIiA6ICJJbWFnZSIKfQ==]",
+		"色图来！",
+		"这不够涩",
+		"给👴🏻爬",
+		"st",
+		"冲了！",
+		"射图",
+		"[b64:ewoJImltYWdlSWQiIDogInszQjkwNkQwRC1GNzYzLTgxMUEtNzY3MC1GMTA4MDhDMkU1RDF9Lm1pcmFpIiwKCSJ0eXBlIiA6ICJJbWFnZSIKfQ==]",
+		"[b64:ewoJImltYWdlSWQiIDogIntDOEQzNjgzRC0xQ0M2LTRFQzYtNTNDQi0wQ0VDRTkzQTg5NTV9Lm1pcmFpIiwKCSJ0eXBlIiA6ICJJbWFnZSIKfQ==]",
+		"黄图来",
+		"社保"
 	]
 }

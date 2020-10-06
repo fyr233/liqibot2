@@ -70,7 +70,7 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\plugins\Tex.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\plugins</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -120,7 +120,7 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\plugins\Tex.h">
-      <Filter>头文件</Filter>
+      <Filter>头文件\plugins</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

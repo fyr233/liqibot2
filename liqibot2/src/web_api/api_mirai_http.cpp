@@ -256,7 +256,22 @@ int64 QQApi::uploadImage()
 
 int QQApi::recall(int64 msgId)
 {
-	return 0;
+	Json::Value d;
+	d["sessionKey"] = sessionKey;
+	d["target"] = msgId;
+	
+	Requests r = Requests::post(http_url + "/recall", dumpsJson(d));
+	if (r.code == 200)
+	{
+		Json::Value res = parseJson(r.text);
+		if (res["code"].asInt() == 0)
+		{
+			return 0;
+		}
+		return -1;
+	}
+
+	return -1;
 }
 
 std::vector<Member> QQApi::getFriendList()

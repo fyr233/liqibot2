@@ -26,6 +26,8 @@ MsgRouter::MsgRouter()
 		(Plugin*) new Setu(&rt_table_dynamic, &rt_table_static, &permission),
 		(Plugin*) new Tex(&rt_table_dynamic, &rt_table_static, &permission)
 	};
+
+	std::cout << "ThreadPool size: " << 2 * std::thread::hardware_concurrency() << "\n";
 }
 
 MsgRouter::~MsgRouter()

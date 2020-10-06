@@ -78,7 +78,7 @@ def Check_Baidu():
                 print('色图！', end='')
                 saveImg(imgurl)
                 break
-            elif each['class_name']=='卡通女性性感' and each['probability']>0.55:
+            elif each['class_name']=='卡通女性性感' and each['probability']>0.56:
                 print('色图！', end='')
                 saveImg(imgurl)
                 break

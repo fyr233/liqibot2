@@ -29,7 +29,8 @@ Setu::Setu(std::vector<Plugin*>* rt_tb_dy_ptr, std::vector<Plugin*>* rt_tb_st_pt
 			"triggers": [
 				"色图"
 				],
-			"max-QPS": 20
+			"max-QPS": 20,
+			"recall-delay": 90
 		}
 		)"";
 
@@ -102,8 +103,13 @@ void Setu::run(Message msg, QQApi* qqApi_ptr)
 				}
 
 				//发送消息
-				qqApi_ptr->sendMessage(msg.member, 0, mc);
+				int msgid = qqApi_ptr->sendMessage(msg.member, 0, mc);
 				std::cout << "Setu: " << mc.toString() << "\n";
+
+				std::this_thread::sleep_for(std::chrono::seconds(config["recall-delay"].asInt()));
+
+				qqApi_ptr->recall(msgid);
+				std::cout << "Setu: recall: " << mc.toString() << "\n";
 
 				return ;
 			}
@@ -150,6 +156,7 @@ void Setu::onCommand(Message msg, std::string s, QQApi* qqApi_ptr)
 	p.add("json", 'j', "raw json config, only work with \"-c get\"");
 	p.add<std::string>("trigger", 't', "trigger words", false, "");
 	p.add<std::string>("image", 'i', "setu", false, "");
+	p.add<int>("recall-delay", 'd', "recall delay", false, 0);
 
 	try
 	{
@@ -176,6 +183,10 @@ void Setu::onCommand(Message msg, std::string s, QQApi* qqApi_ptr)
 		if (!p.get<std::string>("trigger").empty())
 		{
 			config["triggers"].append(p.get<std::string>("trigger"));
+		}
+		if (p.get<int>("recall-delay"))
+		{
+			config["recall-delay"] = p.get<int>("recall-delay");
 		}
 		if (!p.get<std::string>("image").empty())
 		{

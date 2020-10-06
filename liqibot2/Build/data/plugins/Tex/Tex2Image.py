@@ -29,7 +29,7 @@ r = requests.get(url, headers=headers, params=data)
 filename = r.headers['Date'].replace(' ', '').replace(',', '').replace(':', '') + '.png'
 
 
-image = pyvips.Image.new_from_buffer(r.content, '', dpi=600)
+image = pyvips.Image.new_from_buffer(r.content, '', dpi=900)
 background = image.new_from_image([255, 255, 255])
 background += 255
 background.composite(image, 'over').write_to_file(imgfolderdir + filename)

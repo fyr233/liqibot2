@@ -24,7 +24,7 @@ public:
 
 private:
 
-	ThreadPool thread_pool = ThreadPool(std::thread::hardware_concurrency());
+	ThreadPool thread_pool = ThreadPool(2 * std::thread::hardware_concurrency());
 
 };
 

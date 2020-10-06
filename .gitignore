@@ -11,3 +11,4 @@ liqibot2/Build/liqibot2.ilk
 liqibot2/Build/liqibot2.pdb
 *.pyc
 *.log
+miraiOK_Release/config/Console/AutoLogin.yml
