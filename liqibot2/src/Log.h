@@ -9,11 +9,12 @@ public:
 	Log();
 	~Log();
 
-	void save();
-	void add(std::string s, int64_t qq);
+	static void save();
+	static void add_recv(std::string s, int64_t qq);
+	static void add_send(std::string s, int64_t qq);
 
 private:
-	std::string filefolder = "data/logs/";
-	std::vector<std::string> log_buf;
-	int log_buf_size = 10;
+	static inline std::string filefolder = "data/logs/";
+	static inline std::vector<std::string> log_buf;
+	static inline int log_buf_size = 10;
 };

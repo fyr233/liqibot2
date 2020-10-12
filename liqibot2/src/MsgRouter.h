@@ -24,7 +24,7 @@ public:
 	Permission permission;
 
 private:
-	Log log;
+
 	ThreadPool thread_pool = ThreadPool(2 * std::thread::hardware_concurrency());
 
 };

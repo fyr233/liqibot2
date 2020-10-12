@@ -30,7 +30,7 @@ constexpr hash_t operator "" _hash(const char* p, size_t) {
 hash_t stringhash_run_time(const char* str, hash_t last_value = stringhash_basis);
 
 Json::Value parseJson(std::string s);
-std::string dumpsJson(Json::Value v);
+std::string dumpsJson(Json::Value v, bool multiline=true);
 Json::Value loadJson(std::string file);
 
 std::vector<std::string> splitString(const std::string& s, const std::string& spliter);

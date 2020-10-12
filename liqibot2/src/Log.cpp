@@ -30,7 +30,7 @@ void Log::save()
 	log_buf.clear();
 }
 
-void Log::add(std::string s, int64_t qq)
+void Log::add_recv(std::string s, int64_t qq)
 {
 	time_t now = time(0);
 	tm ltm;
@@ -38,7 +38,27 @@ void Log::add(std::string s, int64_t qq)
 
 	std::string log =
 		std::to_string(ltm.tm_hour) + ":" + std::to_string(ltm.tm_min) + ":" + std::to_string(ltm.tm_sec)
-		+ "\t" + std::to_string(qq) + "\t" + s + "\n";
+		+ "\t" + std::to_string(qq) + "\t" + "recv" + "\t"
+		+ s + "\n";
+
+	log_buf.push_back(log);
+
+	if (log_buf.size() >= log_buf_size)
+	{
+		save();
+	}
+}
+
+void Log::add_send(std::string s, int64_t qq)
+{
+	time_t now = time(0);
+	tm ltm;
+	localtime_s(&ltm, &now);
+
+	std::string log =
+		std::to_string(ltm.tm_hour) + ":" + std::to_string(ltm.tm_min) + ":" + std::to_string(ltm.tm_sec)
+		+ "\t" + std::to_string(qq) + "\t" + "send" + "\t"
+		+ s + "\n";
 
 	log_buf.push_back(log);
 

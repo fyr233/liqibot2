@@ -26,9 +26,15 @@ Json::Value parseJson(std::string s)
 	return root;
 }
 
-std::string dumpsJson(Json::Value v)
+std::string dumpsJson(Json::Value v, bool multiline)
 {
 	Json::StreamWriterBuilder writerBuilder;
+	if (multiline == false)
+	{
+		writerBuilder["commentStyle"] = "None";
+		writerBuilder["indentation"] = "";
+	}
+	
 	writerBuilder.settings_["emitUTF8"] = true;
 	std::ostringstream os;
 	std::unique_ptr<Json::StreamWriter> jsonWriter(writerBuilder.newStreamWriter());

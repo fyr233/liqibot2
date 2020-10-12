@@ -37,7 +37,7 @@ MsgRouter::~MsgRouter()
 
 void MsgRouter::onReceived(std::string s, QQApi* qqApi_ptr)
 {
-	log.add(s, qqApi_ptr->qq);
+	Log::add_recv(s, qqApi_ptr->qq);
 
 	Message msg = Message::fromJson(parseJson(s));
 	//msg.msgChain.print();

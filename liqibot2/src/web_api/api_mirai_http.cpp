@@ -4,7 +4,7 @@
 #include "api_mirai_http.h"
 #include "../Requests.h"
 #include "../WebSocket.h"
-
+#include "../Log.h"
 
 QQApi::QQApi()
 {
@@ -170,6 +170,7 @@ int64 QQApi::sendFriendMessage(int64 qq, int64 quote, MessageChain msgChain)
 		Json::Value res = parseJson(r.text);
 		if (res["code"].asInt() == 0)
 		{
+			Log::add_send(dumpsJson(d, false), qq);
 			return res["messageId"].asInt64();
 		}
 		return res["code"].asInt();
@@ -201,6 +202,7 @@ int64 QQApi::sendTempMessage(int64 group, int64 qq, int64 quote, MessageChain ms
 		Json::Value res = parseJson(r.text);
 		if (res["code"].asInt() == 0)
 		{
+			Log::add_send(dumpsJson(d, false), qq);
 			return res["messageId"].asInt64();
 		}
 		return res["code"].asInt();
@@ -231,6 +233,7 @@ int64 QQApi::sendGroupMessage(int64 group, int64 quote, MessageChain msgChain)
 		Json::Value res = parseJson(r.text);
 		if (res["code"].asInt() == 0)
 		{
+			Log::add_send(dumpsJson(d, false), qq);
 			return res["messageId"].asInt64();
 		}
 		return res["code"].asInt();
@@ -266,6 +269,7 @@ int QQApi::recall(int64 msgId)
 		Json::Value res = parseJson(r.text);
 		if (res["code"].asInt() == 0)
 		{
+			Log::add_send(dumpsJson(d, false), qq);
 			return 0;
 		}
 		return -1;
