@@ -276,16 +276,120 @@ int QQApi::recall(int64 msgId)
 
 std::vector<Member> QQApi::getFriendList()
 {
+	Json::Value d;
+	d["sessionKey"] = sessionKey;
+
+	Requests r = Requests::get(http_url + "/friendList", dumpsJson(d));
+	if (r.code == 200)
+	{
+		Json::Value res = parseJson(r.text);
+		std::vector<Member> members;
+		for (int i = 0; i < res.size(); i++)
+		{
+			Member m;
+			m.id = res[i]["id"].asInt64();
+			m.nickname = res[i]["nickname"].asString();
+			m.remark = res[i]["remark"].asString();
+			members.push_back(m);
+		}
+		return members;
+	}
+
 	return std::vector<Member>();
 }
 
 std::vector<Group> QQApi::getGroupList()
 {
+	Json::Value d;
+	d["sessionKey"] = sessionKey;
+
+	Requests r = Requests::get(http_url + "/groupList", dumpsJson(d));
+	if (r.code == 200)
+	{
+		Json::Value res = parseJson(r.text);
+		std::vector<Group> groups;
+		for (int i = 0; i < res.size(); i++)
+		{
+			Group g;
+			g.id = res[i]["id"].asInt64();
+			g.name = res[i]["name"].asString();
+			switch (stringhash_run_time(res[i]["permission"].asString().c_str()))
+			{
+			case "MEMBER"_hash:
+				g.permission = Group::MEMBER;
+				break;
+			case "ADMINISTRATOR"_hash:
+				g.permission = Group::ADMINISTRATOR;
+				break;
+			case "OWNER"_hash:
+				g.permission = Group::OWNER;
+				break;
+			default:
+				break;
+			}
+			
+			groups.push_back(g);
+		}
+		return groups;
+	}
+
 	return std::vector<Group>();
 }
 
 std::vector<Member> QQApi::getMemberList()
 {
+	Json::Value d;
+	d["sessionKey"] = sessionKey;
+
+	Requests r = Requests::get(http_url + "/friendList", dumpsJson(d));
+	if (r.code == 200)
+	{
+		Json::Value res = parseJson(r.text);
+		std::vector<Member> members;
+		for (int i = 0; i < res.size(); i++)
+		{
+			Member m;
+			m.id = res[i]["id"].asInt64();
+			m.memberName = res[i]["memberName"].asString();
+			switch (stringhash_run_time(res[i]["permission"].asString().c_str()))
+			{
+			case "MEMBER"_hash:
+				m.permission = Member::MEMBER;
+				break;
+			case "ADMINISTRATOR"_hash:
+				m.permission = Member::ADMINISTRATOR;
+				break;
+			case "OWNER"_hash:
+				m.permission = Member::OWNER;
+				break;
+			default:
+				break;
+			}
+
+			Group g;
+			g.id = res[i]["id"]["group"]["id"].asInt64();
+			g.name = res[i]["id"]["group"]["name"].asString();
+			switch (stringhash_run_time(res[i]["id"]["group"]["permission"].asString().c_str()))
+			{
+			case "MEMBER"_hash:
+				g.permission = Group::MEMBER;
+				break;
+			case "ADMINISTRATOR"_hash:
+				g.permission = Group::ADMINISTRATOR;
+				break;
+			case "OWNER"_hash:
+				g.permission = Group::OWNER;
+				break;
+			default:
+				break;
+			}
+
+			m.group = g;
+			members.push_back(m);
+		}
+		return members;
+	}
+
 	return std::vector<Member>();
 }
 
@@ -359,7 +463,7 @@ Json::Value QQApi::getSessionConfig()
 	return Json::Value();
 }
 
-void QQApi::startListen(std::function<void(Message msg, QQApi* qqApi)> onReceived)
+void QQApi::startListen(std::function<void(std::string, QQApi* qqApi)> onReceived)
 {
 	this->onReceived = onReceived;
 	auto ws = std::make_shared<WebSocket>(ws_url + "/all?sessionKey=" + sessionKey,
@@ -379,8 +483,8 @@ void QQApi::onHandshake()
 void QQApi::onMessage(std::string s)
 {
 	std::cout << s << "\n";
-	Message msg = Message::fromJson(parseJson(s));
-	(onReceived)(msg, this);
+	
+	(onReceived)(s, this);
 }
 
 void QQApi::onErr(std::string s)

@@ -14,7 +14,7 @@ int main()
 	auto msgRouter_ptr = new MsgRouter();
 
 	std::cout << "connect: " << qqApi.connect() << "\n";
-	qqApi.startListen([msgRouter_ptr](Message msg, QQApi* qqApi) {msgRouter_ptr->onReceived(msg, qqApi); });
+	qqApi.startListen([msgRouter_ptr](std::string s, QQApi* qqApi) {msgRouter_ptr->onReceived(s, qqApi); });
 
 	delete msgRouter_ptr;
 

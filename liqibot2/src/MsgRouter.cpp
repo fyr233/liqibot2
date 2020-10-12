@@ -35,8 +35,11 @@ MsgRouter::~MsgRouter()
 	
 }
 
-void MsgRouter::onReceived(Message msg, QQApi* qqApi_ptr)
+void MsgRouter::onReceived(std::string s, QQApi* qqApi_ptr)
 {
+	log.add(s, qqApi_ptr->qq);
+
+	Message msg = Message::fromJson(parseJson(s));
 	//msg.msgChain.print();
 
 	float metric_max = 0.0;

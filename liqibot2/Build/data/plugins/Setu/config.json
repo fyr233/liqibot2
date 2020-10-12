@@ -1,7 +1,8 @@
 {
 	"active" : true,
-	"max-QPS" : 20,
-	"recall-delay" : 90,
+	"max-QPS" : 1,
+	"recall" : false,
+	"recall-delay" : 180,
 	"triggers" : 
 	[
 		"色图",

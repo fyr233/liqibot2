@@ -30,6 +30,7 @@ Setu::Setu(std::vector<Plugin*>* rt_tb_dy_ptr, std::vector<Plugin*>* rt_tb_st_pt
 				"色图"
 				],
 			"max-QPS": 20,
+			"recall": true,
 			"recall-delay": 90
 		}
 		)"";
@@ -85,6 +86,25 @@ void Setu::run(Message msg, QQApi* qqApi_ptr)
 			//std::cout << s << "\n" << command << "\n" << (s == command) << "\n";
 			if (s == command)
 			{
+				//检测QPS
+				timelist.resize(config["max-QPS"].asInt(), 0);
+				time_t now = time(0);
+				for (int j = 0; j < timelist.size(); j++)
+				{
+					if (now - timelist[j] > 2 || timelist[j] == 0)//未达到QPS
+					{
+						timelist[j] = now;
+						break;
+					}
+					else if (j == timelist.size() - 1)//搜索达到终点，已达到QPS
+					{
+						//发送消息
+						qqApi_ptr->sendMessage(msg.member, 0, u8"冲太快了啦");
+						std::cout << "Setu: " << u8"冲太快了啦" << "\n";
+						return;
+					}
+				}
+
 				//发色图
 
 				//调用SelectSetu.py，返回相对路径的文件名，以换行分隔
@@ -106,10 +126,14 @@ void Setu::run(Message msg, QQApi* qqApi_ptr)
 				int msgid = qqApi_ptr->sendMessage(msg.member, 0, mc);
 				std::cout << "Setu: " << mc.toString() << "\n";
 
-				std::this_thread::sleep_for(std::chrono::seconds(config["recall-delay"].asInt()));
+				//撤回
+				if (config["recall"].asBool())
+				{
+					std::this_thread::sleep_for(std::chrono::seconds(config["recall-delay"].asInt()));
 
-				qqApi_ptr->recall(msgid);
-				std::cout << "Setu: recall: " << mc.toString() << "\n";
+					qqApi_ptr->recall(msgid);
+					std::cout << "Setu: recall: " << mc.toString() << "\n";
+				}
 
 				return ;
 			}
@@ -156,7 +180,9 @@ void Setu::onCommand(Message msg, std::string s, QQApi* qqApi_ptr)
 	p.add("json", 'j', "raw json config, only work with \"-c get\"");
 	p.add<std::string>("trigger", 't', "trigger words", false, "");
 	p.add<std::string>("image", 'i', "setu", false, "");
+	p.add<int>("recall", 'r', "recall on/off", false, -1);
 	p.add<int>("recall-delay", 'd', "recall delay", false, 0);
+	p.add<int>("QPS", 'q', "QPS limit", false, 0);
 
 	try
 	{
@@ -183,6 +209,10 @@ void Setu::onCommand(Message msg, std::string s, QQApi* qqApi_ptr)
 		if (!p.get<std::string>("trigger").empty())
 		{
 			config["triggers"].append(p.get<std::string>("trigger"));
+		}
+		if (p.get<int>("recall") != -1)
+		{
+			config["recall"] = (bool)p.get<int>("recall");
 		}
 		if (p.get<int>("recall-delay"))
 		{
@@ -215,6 +245,11 @@ void Setu::onCommand(Message msg, std::string s, QQApi* qqApi_ptr)
 				}
 			}
 		}
+		if (p.get<int>("QPS"))
+		{
+			config["max-QPS"] = p.get<int>("QPS");
+		}
+
 		qqApi_ptr->sendMessage(msg.member, 0,
 			"set success"
 		);

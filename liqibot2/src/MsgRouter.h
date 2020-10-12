@@ -7,6 +7,7 @@
 #include "web_api/api_mirai_http.h"
 #include "plugins/Plugin.h"
 #include "plugins/Repeat.h"
+#include "Log.h"
 
 
 class MsgRouter
@@ -15,7 +16,7 @@ public:
 	MsgRouter();
 	~MsgRouter();
 
-	void onReceived(Message msg, QQApi* qqApi_ptr);
+	void onReceived(std::string s, QQApi* qqApi_ptr);
 	void onClose();
 
 	std::vector<Plugin*> rt_table_static;
@@ -23,7 +24,7 @@ public:
 	Permission permission;
 
 private:
-
+	Log log;
 	ThreadPool thread_pool = ThreadPool(2 * std::thread::hardware_concurrency());
 
 };

@@ -1,5 +1,5 @@
 #pragma once
-
+#include <ctime>
 
 #include <json.h>
 #include "../web_api/api_mirai_http.h"
@@ -18,5 +18,6 @@ public:
 	void onClose();
 
 private:
+	std::vector<time_t> timelist;
 
 };

@@ -56,7 +56,7 @@ public:
 	int setSessionConfig(int cacheSize, bool enableWS);
 	Json::Value getSessionConfig();
 
-	void startListen(std::function<void(Message msg, QQApi* qqApi)> onReceived);
+	void startListen(std::function<void(std::string, QQApi* qqApi)> onReceived);
 
 	int port;
 	std::string host;
@@ -71,7 +71,7 @@ public:
 
 
 private:
-	std::function<void(Message msg, QQApi* qqApi)> onReceived;
+	std::function<void(std::string, QQApi* qqApi)> onReceived;
 
 	void onHandshake();
 	void onMessage(std::string s);
