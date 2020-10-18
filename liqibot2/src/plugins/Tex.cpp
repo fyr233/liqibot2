@@ -66,6 +66,7 @@ void Tex::run(Message msg, QQApi* qqApi_ptr)
 {
 	std::string s = msg.msgChain.toString();
 	std::string tex = s.substr(s.find_first_of("\r\n") + 1);
+	tex = utf8_to_ansi(tex);
 	//std::cout << tex << "\n";
 
 	//调用Tex2Image.py，传入tex，返回png路径
