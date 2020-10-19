@@ -15,10 +15,14 @@ void Log::save()
 	tm ltm;
 	localtime_s(&ltm, &now);
 
+	std::string year = std::to_string(1900 + ltm.tm_year);
+	std::string mon = 1 + ltm.tm_mon > 9 ? std::to_string(1 + ltm.tm_mon) : "0" + std::to_string(1 + ltm.tm_mon);
+	std::string day = ltm.tm_mday > 9 ? std::to_string(ltm.tm_mday) : "0" + std::to_string(ltm.tm_mday);
+
 	std::string filepath =
-		filefolder + std::to_string(1900 + ltm.tm_year) + "-"
-		+ std::to_string(1 + ltm.tm_mon) + "-"
-		+ std::to_string(ltm.tm_mday) + ".log";
+		filefolder + year + "-"
+		+ mon + "-"
+		+ day + ".log";
 
 	std::ofstream f(filepath, std::ios_base::app);
 	for (int i = 0; i < log_buf.size(); i++)
@@ -27,7 +31,7 @@ void Log::save()
 	}
 
 	f.close();
-	log_buf.clear();
+	log_buf.resize(0);
 }
 
 void Log::add_recv(std::string s, int64_t qq)
@@ -36,8 +40,12 @@ void Log::add_recv(std::string s, int64_t qq)
 	tm ltm;
 	localtime_s(&ltm, &now);
 
+	std::string hour = ltm.tm_hour > 9 ? std::to_string(ltm.tm_hour) : "0" + std::to_string(ltm.tm_hour);
+	std::string min = ltm.tm_min > 9 ? std::to_string(ltm.tm_min) : "0" + std::to_string(ltm.tm_min);
+	std::string sec = ltm.tm_sec > 9 ? std::to_string(ltm.tm_sec) : "0" + std::to_string(ltm.tm_sec);
+
 	std::string log =
-		std::to_string(ltm.tm_hour) + ":" + std::to_string(ltm.tm_min) + ":" + std::to_string(ltm.tm_sec)
+		hour + ":" + min + ":" + sec
 		+ "\t" + std::to_string(qq) + "\t" + "recv" + "\t"
 		+ s + "\n";
 
@@ -55,8 +63,12 @@ void Log::add_send(std::string s, int64_t qq)
 	tm ltm;
 	localtime_s(&ltm, &now);
 
+	std::string hour = ltm.tm_hour > 9 ? std::to_string(ltm.tm_hour) : "0" + std::to_string(ltm.tm_hour);
+	std::string min = ltm.tm_min > 9 ? std::to_string(ltm.tm_min) : "0" + std::to_string(ltm.tm_min);
+	std::string sec = ltm.tm_sec > 9 ? std::to_string(ltm.tm_sec) : "0" + std::to_string(ltm.tm_sec);
+
 	std::string log =
-		std::to_string(ltm.tm_hour) + ":" + std::to_string(ltm.tm_min) + ":" + std::to_string(ltm.tm_sec)
+		hour + ":" + min + ":" + sec
 		+ "\t" + std::to_string(qq) + "\t" + "send" + "\t"
 		+ s + "\n";
 
