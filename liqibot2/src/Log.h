@@ -10,6 +10,7 @@ public:
 	~Log();
 
 	static void save();
+	static void save_immediately(std::string log);
 	static void add_recv(std::string s, int64_t qq);
 	static void add_send(std::string s, int64_t qq);
 

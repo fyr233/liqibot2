@@ -166,6 +166,7 @@
     <ClCompile Include="src\plugins\Repeat.cpp" />
     <ClCompile Include="src\plugins\ScoldMe.cpp" />
     <ClCompile Include="src\plugins\Setu.cpp" />
+    <ClCompile Include="src\plugins\Statistics.cpp" />
     <ClCompile Include="src\plugins\Tex.cpp" />
     <ClCompile Include="src\Requests.cpp" />
     <ClCompile Include="src\SubProcess.cpp" />
@@ -185,6 +186,7 @@
     <ClInclude Include="src\plugins\Repeat.h" />
     <ClInclude Include="src\plugins\ScoldMe.h" />
     <ClInclude Include="src\plugins\Setu.h" />
+    <ClInclude Include="src\plugins\Statistics.h" />
     <ClInclude Include="src\plugins\Tex.h" />
     <ClInclude Include="src\Requests.h" />
     <ClInclude Include="src\SubProcess.h" />

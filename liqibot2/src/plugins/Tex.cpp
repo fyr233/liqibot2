@@ -86,7 +86,7 @@ void Tex::run(Message msg, QQApi* qqApi_ptr)
 
 	//发送消息
 	qqApi_ptr->sendMessage(msg.member, 0, mc);
-	std::cout << "Tex: " << mc.toString() << "\n";
+	std::cout << "Tex: " << dumpsJson(mc.toJson(), false) << "\n";
 }
 
 void Tex::onCommand(Message msg, std::string s, QQApi* qqApi_ptr)

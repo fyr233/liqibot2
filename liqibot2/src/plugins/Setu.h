@@ -19,5 +19,8 @@ public:
 
 private:
 	std::vector<time_t> timelist;
+	std::string logfolderpath = "data/plugins/Setu/log/";
+
+	void addlog(std::string sendorrecv, Member m, std::string image);
 
 };

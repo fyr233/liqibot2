@@ -6,6 +6,7 @@
 #include "MsgRouter.h"
 #include "Message.h"
 #include "web_api/api_mirai_http.h"
+
 #include "plugins/Plugin.h"
 #include "plugins/Repeat.h"
 #include "plugins/Command.h"
@@ -14,6 +15,7 @@
 #include "plugins/RandomReply.h"
 #include "plugins/Setu.h"
 #include "plugins/Tex.h"
+#include "plugins/Statistics.h"
 
 MsgRouter::MsgRouter()
 {
@@ -24,7 +26,8 @@ MsgRouter::MsgRouter()
 		(Plugin*) new Default(&rt_table_dynamic, &rt_table_static, &permission),
 		(Plugin*) new RandomReply(&rt_table_dynamic, &rt_table_static, &permission),
 		(Plugin*) new Setu(&rt_table_dynamic, &rt_table_static, &permission),
-		(Plugin*) new Tex(&rt_table_dynamic, &rt_table_static, &permission)
+		(Plugin*) new Tex(&rt_table_dynamic, &rt_table_static, &permission),
+		(Plugin*) new Statistics(&rt_table_dynamic, &rt_table_static, &permission)
 	};
 
 	std::cout << "ThreadPool size: " << 2 * std::thread::hardware_concurrency() << "\n";
@@ -63,9 +66,10 @@ void MsgRouter::onReceived(std::string s, QQApi* qqApi_ptr)
 				{
 					p->run(msg, qqApi_ptr);
 				}
-				catch (const std::exception&)
+				catch (const std::exception& e)
 				{
 					std::cout << "plugin " + p->name + " throw an error\n";
+						//<< std::to_string(e) << "\n";
 				}
 				
 			}

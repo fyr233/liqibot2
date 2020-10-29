@@ -1,0 +1,82 @@
+@charset "utf-8";
+
+/*总体布局*/
+.Time{
+  position:absolute;
+  width:1200px;
+  height:60px;
+  top:20px;
+  left:0%;
+  right:0%;
+  margin: 0% 0 0 0%;
+}
+
+.todayMsgNum{
+  position:absolute;
+  width:1200px;
+  height:80px;
+  top:90px;
+  left:0%;
+  right:0%;
+  margin: 0% 0 0 0%;
+}
+
+.todayMsgInc{
+  position:absolute;
+  width:590px;
+  height:400px;
+  top:180px;
+  left:1%;
+  margin: 0% 0 0 0%;
+  background:#141414;
+}
+
+.todaySetuInc{
+  position:absolute;
+  width:590px;
+  height:400px;
+  top:180px;
+  right:1%;
+  margin: 0% 0 0 0%;
+  background:#141414;
+}
+
+.hisSetuInc{
+  position:absolute;
+  width:590px;
+  height:400px;
+  top:590px;
+  left:1%;
+  margin: 0% 0 0 0%;
+  background:#141414;
+}
+
+.todaySetuGiveRank{
+  position:absolute;
+  width:590px;
+  height:800px;
+  top:1000px;
+  left:1%;
+  margin: 0% 0 0 0%;
+  background:#141414;
+}
+
+.todaySetuGetRank{
+  position:absolute;
+  width:590px;
+  height:800px;
+  top:1000px;
+  right:1%;
+  margin: 0% 0 0 0%;
+  background:#141414;
+}
+
+.nowTime{
+  position:absolute;
+  width:1200px;
+  height:30px;
+  top:1810px;
+  left:0%;
+  right:0%;
+  margin: 0% 0 0 0%;
+}

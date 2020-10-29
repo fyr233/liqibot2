@@ -91,7 +91,7 @@ void Setu::run(Message msg, QQApi* qqApi_ptr)
 				time_t now = time(0);
 				for (int j = 0; j < timelist.size(); j++)
 				{
-					if (now - timelist[j] > 2 || timelist[j] == 0)//未达到QPS
+					if (now - timelist[j] > 10 || timelist[j] == 0)//未达到QPS。此处改为10s时效，即QP10S
 					{
 						timelist[j] = now;
 						break;
@@ -110,29 +110,33 @@ void Setu::run(Message msg, QQApi* qqApi_ptr)
 				//调用SelectSetu.py，返回相对路径的文件名，以换行分隔
 				std::string ans = SubProcess::popen("python data/plugins/Setu/SelectSetu.py");
 
-				//构造图片消息
-				auto imgfilelist = splitString(ans, "\n");
-				MessageChain mc;
-				for (auto imgfile : imgfilelist)
+				if (ans.size())
 				{
-					MessageChain::AMessage a;
-					a.type = MessageChain::AMessage::Image;
-					a.path = imgfile;
-					
-					mc.chain.push_back(a);
-				}
+					//构造图片消息
+					auto imgfilelist = splitString(ans, "\n");
+					MessageChain mc;
+					for (auto imgfile : imgfilelist)
+					{
+						MessageChain::AMessage a;
+						a.type = MessageChain::AMessage::Image;
+						a.path = imgfile;
 
-				//发送消息
-				int msgid = qqApi_ptr->sendMessage(msg.member, 0, mc);
-				std::cout << "Setu: " << mc.toString() << "\n";
+						mc.chain.push_back(a);
+					}
 
-				//撤回
-				if (config["recall"].asBool())
-				{
-					std::this_thread::sleep_for(std::chrono::seconds(config["recall-delay"].asInt()));
+					//发送消息
+					int msgid = qqApi_ptr->sendMessage(msg.member, 0, mc);
+					std::cout << "Setu: " << dumpsJson(mc.toJson(), false) << "\n";
+					addlog("send", msg.member, dumpsJson(mc.toJson(), false));
 
-					qqApi_ptr->recall(msgid);
-					std::cout << "Setu: recall: " << mc.toString() << "\n";
+					//撤回
+					if (config["recall"].asBool())
+					{
+						std::this_thread::sleep_for(std::chrono::seconds(config["recall-delay"].asInt()));
+
+						qqApi_ptr->recall(msgid);
+						std::cout << "Setu: recall: " << mc.toString() << "\n";
+					}
 				}
 
 				return ;
@@ -155,6 +159,7 @@ void Setu::run(Message msg, QQApi* qqApi_ptr)
 			if (ans.size() > 0)
 			{
 				qqApi_ptr->sendMessage(msg.member, 0, ansi_to_utf8(ans));
+				addlog("recv", msg.member, dumpsJson(msg.msgChain.chain[i].toJson(), false));
 			}
 		}
 	}
@@ -231,6 +236,7 @@ void Setu::onCommand(Message msg, std::string s, QQApi* qqApi_ptr)
 						if (msg.msgChain.chain[j].type == MessageChain::AMessage::Image && msg.msgChain.chain[j].imageId == mc.chain[i].imageId)
 						{
 							//下载图片
+							//TO DO: get函数存在bug，未修复
 							Requests r = Requests::get(msg.msgChain.chain[j].url);
 
 							std::cout << msg.msgChain.chain[j].toJson() << "\n";
@@ -312,4 +318,34 @@ void Setu::onCommand(Message msg, std::string s, QQApi* qqApi_ptr)
 
 void Setu::onClose()
 {
+}
+
+void Setu::addlog(std::string sendorrecv, Member m, std::string image)
+{
+	time_t now = time(0);
+	tm ltm;
+	localtime_s(&ltm, &now);
+
+	std::string year = std::to_string(1900 + ltm.tm_year);
+	std::string mon = 1 + ltm.tm_mon > 9 ? std::to_string(1 + ltm.tm_mon) : "0" + std::to_string(1 + ltm.tm_mon);
+	std::string day = ltm.tm_mday > 9 ? std::to_string(ltm.tm_mday) : "0" + std::to_string(ltm.tm_mday);
+
+	std::string filepath =
+		logfolderpath + year + "-"
+		+ mon + "-"
+		+ day + ".log";
+
+	std::string hour = ltm.tm_hour > 9 ? std::to_string(ltm.tm_hour) : "0" + std::to_string(ltm.tm_hour);
+	std::string min = ltm.tm_min > 9 ? std::to_string(ltm.tm_min) : "0" + std::to_string(ltm.tm_min);
+	std::string sec = ltm.tm_sec > 9 ? std::to_string(ltm.tm_sec) : "0" + std::to_string(ltm.tm_sec);
+
+	std::string log =
+		hour + ":" + min + ":" + sec
+		+ "\t" + sendorrecv
+		+ "\t" + std::to_string(m.id) + "\t" + std::to_string(m.group.id) 
+		+ "\t" + image + "\n";
+
+	std::ofstream f(filepath, std::ios_base::app);
+	f << log;
+	f.close();
 }

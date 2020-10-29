@@ -1,6 +1,6 @@
 {
 	"active" : true,
-	"max-QPS" : 1,
+	"max-QPS" : 6,
 	"recall" : false,
 	"recall-delay" : 180,
 	"triggers" : 
@@ -8,6 +8,7 @@
 		"色图",
 		"色图！",
 		"涩图",
+		"涩图！",
 		"色图来",
 		"[b64:ewoJImltYWdlSWQiIDogIntCNDA3RjcwOC1BMkM2LUE1MDYtMzQyMC05OERGN0NBQzRBNTd9Lm1pcmFpIiwKCSJ0eXBlIiA6ICJJbWFnZSIKfQ==]",
 		"色图来！",
@@ -19,6 +20,7 @@
 		"[b64:ewoJImltYWdlSWQiIDogInszQjkwNkQwRC1GNzYzLTgxMUEtNzY3MC1GMTA4MDhDMkU1RDF9Lm1pcmFpIiwKCSJ0eXBlIiA6ICJJbWFnZSIKfQ==]",
 		"[b64:ewoJImltYWdlSWQiIDogIntDOEQzNjgzRC0xQ0M2LTRFQzYtNTNDQi0wQ0VDRTkzQTg5NTV9Lm1pcmFpIiwKCSJ0eXBlIiA6ICJJbWFnZSIKfQ==]",
 		"黄图来",
-		"社保"
+		"社保",
+		"[b64:ewoJImltYWdlSWQiIDogIns3NUJGQTlGNi1FMjg5LUZGNjctRDY2Mi0xNkVFQTlDRTNCQjV9Lm1pcmFpIiwKCSJ0eXBlIiA6ICJJbWFnZSIKfQ==]"
 	]
 }

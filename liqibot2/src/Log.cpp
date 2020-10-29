@@ -34,6 +34,26 @@ void Log::save()
 	log_buf.resize(0);
 }
 
+void Log::save_immediately(std::string log)
+{
+	time_t now = time(0);
+	tm ltm;
+	localtime_s(&ltm, &now);
+
+	std::string year = std::to_string(1900 + ltm.tm_year);
+	std::string mon = 1 + ltm.tm_mon > 9 ? std::to_string(1 + ltm.tm_mon) : "0" + std::to_string(1 + ltm.tm_mon);
+	std::string day = ltm.tm_mday > 9 ? std::to_string(ltm.tm_mday) : "0" + std::to_string(ltm.tm_mday);
+
+	std::string filepath =
+		filefolder + year + "-"
+		+ mon + "-"
+		+ day + ".log";
+
+	std::ofstream f(filepath, std::ios_base::app);
+	f << log;
+	f.close();
+}
+
 void Log::add_recv(std::string s, int64_t qq)
 {
 	time_t now = time(0);
@@ -46,15 +66,19 @@ void Log::add_recv(std::string s, int64_t qq)
 
 	std::string log =
 		hour + ":" + min + ":" + sec
-		+ "\t" + std::to_string(qq) + "\t" + "recv" + "\t"
+		+ "\t" + "recv" + "\t" + std::to_string(qq) + "\t"
 		+ s + "\n";
 
+	save_immediately(log);
+
+	/*
 	log_buf.push_back(log);
 
 	if (log_buf.size() >= log_buf_size)
 	{
 		save();
 	}
+	*/
 }
 
 void Log::add_send(std::string s, int64_t qq)
@@ -69,13 +93,17 @@ void Log::add_send(std::string s, int64_t qq)
 
 	std::string log =
 		hour + ":" + min + ":" + sec
-		+ "\t" + std::to_string(qq) + "\t" + "send" + "\t"
+		+ "\t" + "send" + "\t" + std::to_string(qq) + "\t"
 		+ s + "\n";
 
+	save_immediately(log);
+
+	/*
 	log_buf.push_back(log);
 
 	if (log_buf.size() >= log_buf_size)
 	{
 		save();
 	}
+	*/
 }

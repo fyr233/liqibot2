@@ -3,7 +3,7 @@ cors:
 host: 0.0.0.0
 port: 8080
 authKey: 123456789
-cacheSize: 40960
+cacheSize: 102400
 enableWebsocket: true
 report: 
   enable: true

@@ -486,7 +486,7 @@ void QQApi::onHandshake()
 
 void QQApi::onMessage(std::string s)
 {
-	std::cout << s << "\n";
+	//std::cout << s << "\n";
 	
 	(onReceived)(s, this);
 }

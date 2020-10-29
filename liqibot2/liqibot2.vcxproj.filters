@@ -75,6 +75,9 @@
     <ClCompile Include="src\Log.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\plugins\Statistics.cpp">
+      <Filter>源文件\plugins</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\web_api\api_mirai_http.h">
@@ -127,6 +130,9 @@
     </ClInclude>
     <ClInclude Include="src\Log.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\plugins\Statistics.h">
+      <Filter>头文件\plugins</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

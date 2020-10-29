@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <!-- 引入 ECharts 文件 -->
+    <script src="static/js/echarts.js"></script>
+    <script src="static/js/theme/reddark.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/index.css">
+    <!--<link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css">-->
+    <style>
+        @font-face {
+            font-family: 'YH';
+            src: url('static/css/msyh.ttc'), url('static/css/msyhbd.ttc');
+        }
+    </style>
+</head>
+
+<body bgcolor="#1B1B1B">
+    <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+    <!-- 文字：统计日期和时间 -->
+    <div class="Time" id="Time"></div>
+
+    <!-- 文字：今日收发消息数 -->
+    <div class="todayMsgNum" id="todayMsgNum"></div>
+
+    <!-- 折线：今日收发消息增长 -->
+    <div class="todayMsgInc" id="todayMsgInc"></div>
+
+    <!-- 折线：今日收发色图增长 -->
+    <div class="todaySetuInc" id="todaySetuInc"></div>
+
+    <!-- 折线：历史色图库增长 -->
+    <div class="hisSetuInc" id="hisSetuInc"></div>
+
+    <!-- 柱状：今日色图贡献排行 -->
+    <div class="todaySetuGiveRank" id="todaySetuGiveRank"></div>
+
+    <!-- 柱状：今日色图需求排行 -->
+    <div class="todaySetuGetRank" id="todaySetuGetRank"></div>
+
+    <!-- 文字：当前日期和时间 -->
+    <div class="nowTime" id="nowTime"></div>
+
+    <script src="static/js/drawdata.js"></script>
+    <script src="static/js/draw.js"></script>
+</body>
+
+</html>
