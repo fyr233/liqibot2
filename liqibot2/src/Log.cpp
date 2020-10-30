@@ -54,6 +54,24 @@ void Log::save_immediately(std::string log)
 	f.close();
 }
 
+void Log::add(std::string type, std::string s, int64_t qq)
+{
+	time_t now = time(0);
+	tm ltm;
+	localtime_s(&ltm, &now);
+
+	std::string hour = ltm.tm_hour > 9 ? std::to_string(ltm.tm_hour) : "0" + std::to_string(ltm.tm_hour);
+	std::string min = ltm.tm_min > 9 ? std::to_string(ltm.tm_min) : "0" + std::to_string(ltm.tm_min);
+	std::string sec = ltm.tm_sec > 9 ? std::to_string(ltm.tm_sec) : "0" + std::to_string(ltm.tm_sec);
+
+	std::string log =
+		hour + ":" + min + ":" + sec
+		+ "\t" + type + "\t" + std::to_string(qq) + "\t"
+		+ s + "\n";
+
+	save_immediately(log);
+}
+
 void Log::add_recv(std::string s, int64_t qq)
 {
 	time_t now = time(0);

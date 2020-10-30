@@ -40,10 +40,20 @@ MsgRouter::~MsgRouter()
 
 void MsgRouter::onReceived(std::string s, QQApi* qqApi_ptr)
 {
-	Log::add_recv(s, qqApi_ptr->qq);
 
 	Message msg = Message::fromJson(parseJson(s));
 	//msg.msgChain.print();
+
+	switch (msg.type)
+	{
+	case Message::FriendMessage:
+	case Message::GroupMessage:
+		Log::add("recv", s, qqApi_ptr->qq);
+		break;
+	default:
+		Log::add("event", s, qqApi_ptr->qq);
+		break;
+	}
 
 	float metric_max = 0.0;
 	int max_id;

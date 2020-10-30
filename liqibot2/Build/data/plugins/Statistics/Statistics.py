@@ -12,7 +12,6 @@ import time
 import subprocess
 import os
 import sys
-import pyvips
 
 
 logfolderdir = 'data/logs/'
@@ -24,13 +23,17 @@ imgfolderdir = '../../miraiOK_Release/data/MiraiApiHttp/images/Statistics/'
 imgwidth = 1200
 imgheight = 1920
 
+localtime = time.localtime(time.time())
+
 def QQavatarurl(qq):
     return "http://q1.qlogo.cn/g?b=qq&nk=" + qq + "&s=640"
 
 def calculate(filename, logfile, setulogfile, outpath):
     
+    staticDate = filename[:-4].replace('-', '/')
+
     #统计时间
-    dateString = filename[:-4] + ' 的统计数据'
+    dateString = staticDate + ' 的统计数据'
 
     #今日消息增长
     todayMsgInc_data = {
@@ -46,8 +49,8 @@ def calculate(filename, logfile, setulogfile, outpath):
             recv_count += 1
         elif contents[1]=='send':
             send_count += 1
-        todayMsgInc_data['recv'].append(['2020/10/30 ' + contents[0], recv_count])
-        todayMsgInc_data['send'].append(['2020/10/30 ' + contents[0], send_count])
+        todayMsgInc_data['recv'].append([staticDate + ' ' + contents[0], recv_count])
+        todayMsgInc_data['send'].append([staticDate + ' ' + contents[0], send_count])
 
     #今日收发消息总数
     todayMsgStr = "今日收到消息" + str(recv_count) + "次\t" + "发送消息" + str(send_count) + "次"
@@ -66,8 +69,8 @@ def calculate(filename, logfile, setulogfile, outpath):
             setu_recv_count += 1
         elif contents[1]=='send':
             setu_send_count += 1
-        todaySetuInc_data['recv'].append(['2020/10/30 ' + contents[0], setu_recv_count])
-        todaySetuInc_data['send'].append(['2020/10/30 ' + contents[0], setu_send_count])
+        todaySetuInc_data['recv'].append([staticDate + ' ' + contents[0], setu_recv_count])
+        todaySetuInc_data['send'].append([staticDate + ' ' + contents[0], setu_send_count])
 
     #历史色图增长
     hisSetuInc_data = {
@@ -142,7 +145,7 @@ def render(imgpath):
 
 
 
-localtime = time.localtime(time.time())
+
 filename = ''
 
 
@@ -162,7 +165,7 @@ finally:
     calculate(filename, logfile, setulogfile, drawdatapath)
 
     #渲染图片
-    imgname = str(localtime[0]) + str(localtime[1]) + str(localtime[2])
+    imgname = str(localtime[0]) + str(localtime[1]) + str(localtime[2]) + str(localtime[3]) + str(localtime[4]) + str(localtime[5])
     render(imgfolderdir + imgname + '.png')
 
     #newimage = pyvips.Image.new_from_file(imgfolderdir + imgname + '.png')

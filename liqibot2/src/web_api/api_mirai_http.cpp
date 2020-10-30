@@ -170,7 +170,7 @@ int64 QQApi::sendFriendMessage(int64 qq, int64 quote, MessageChain msgChain)
 		Json::Value res = parseJson(r.text);
 		if (res["code"].asInt() == 0)
 		{
-			Log::add_send(dumpsJson(d, false), qq);
+			Log::add("send", dumpsJson(d, false), this->qq);
 			return res["messageId"].asInt64();
 		}
 		return res["code"].asInt();
@@ -202,7 +202,7 @@ int64 QQApi::sendTempMessage(int64 group, int64 qq, int64 quote, MessageChain ms
 		Json::Value res = parseJson(r.text);
 		if (res["code"].asInt() == 0)
 		{
-			Log::add_send(dumpsJson(d, false), qq);
+			Log::add("send", dumpsJson(d, false), this->qq);
 			return res["messageId"].asInt64();
 		}
 		return res["code"].asInt();
@@ -233,7 +233,7 @@ int64 QQApi::sendGroupMessage(int64 group, int64 quote, MessageChain msgChain)
 		Json::Value res = parseJson(r.text);
 		if (res["code"].asInt() == 0)
 		{
-			Log::add_send(dumpsJson(d, false), qq);
+			Log::add("send", dumpsJson(d, false), this->qq);
 			return res["messageId"].asInt64();
 		}
 		return res["code"].asInt();
@@ -269,7 +269,7 @@ int QQApi::recall(int64 msgId)
 		Json::Value res = parseJson(r.text);
 		if (res["code"].asInt() == 0)
 		{
-			Log::add_send(dumpsJson(d, false), qq);
+			Log::add("send", dumpsJson(d, false), this->qq);
 			return 0;
 		}
 		return -1;
