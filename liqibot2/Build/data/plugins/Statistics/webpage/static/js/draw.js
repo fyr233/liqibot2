@@ -507,7 +507,7 @@ Chart_todaySetuGetRank.setOption(option = {
         orient: 'horizontal',
         left: 'center',
         min: 0,
-        max: todaySetuGiveRank_data['count'][0],
+        max: todaySetuGetRank_data['count'][0],
         //text: ['High Score', 'Low Score'],
         // Map the score column to color
         dimension: 0,

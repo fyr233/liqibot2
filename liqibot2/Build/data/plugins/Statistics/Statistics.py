@@ -44,13 +44,14 @@ def calculate(filename, logfile, setulogfile, outpath):
     send_count = 0
     for eachline in logfile.readlines():
         contents = eachline.split('\t')
-        #todayMsgInc_data['time'].append(contents[0])
-        if contents[1]=='recv':
-            recv_count += 1
-        elif contents[1]=='send':
-            send_count += 1
-        todayMsgInc_data['recv'].append([staticDate + ' ' + contents[0], recv_count])
-        todayMsgInc_data['send'].append([staticDate + ' ' + contents[0], send_count])
+        if len(contents) > 3:
+            #todayMsgInc_data['time'].append(contents[0])
+            if contents[1]=='recv':
+                recv_count += 1
+            elif contents[1]=='send':
+                send_count += 1
+            todayMsgInc_data['recv'].append([staticDate + ' ' + contents[0], recv_count])
+            todayMsgInc_data['send'].append([staticDate + ' ' + contents[0], send_count])
 
     #今日收发消息总数
     todayMsgStr = "今日收到消息" + str(recv_count) + "次\t" + "发送消息" + str(send_count) + "次"
@@ -64,13 +65,14 @@ def calculate(filename, logfile, setulogfile, outpath):
     setu_send_count = 0
     for eachline in setulogfile.readlines():
         contents = eachline.split('\t')
-        #todaySetuInc_data['time'].append(contents[0])
-        if contents[1]=='recv':
-            setu_recv_count += 1
-        elif contents[1]=='send':
-            setu_send_count += 1
-        todaySetuInc_data['recv'].append([staticDate + ' ' + contents[0], setu_recv_count])
-        todaySetuInc_data['send'].append([staticDate + ' ' + contents[0], setu_send_count])
+        if len(contents) > 3:
+            #todaySetuInc_data['time'].append(contents[0])
+            if contents[1]=='recv':
+                setu_recv_count += 1
+            elif contents[1]=='send':
+                setu_send_count += 1
+            todaySetuInc_data['recv'].append([staticDate + ' ' + contents[0], setu_recv_count])
+            todaySetuInc_data['send'].append([staticDate + ' ' + contents[0], setu_send_count])
 
     #历史色图增长
     hisSetuInc_data = {
@@ -98,16 +100,17 @@ def calculate(filename, logfile, setulogfile, outpath):
     setulogfile.seek(0)
     for eachline in setulogfile.readlines():
         contents = eachline.split('\t')
-        if contents[1]=='recv':
-            try:
-                give_count[contents[2]] += 1
-            except:
-                give_count[contents[2]] = 1
-        elif contents[1]=='send':
-            try:
-                get_count[contents[2]] += 1
-            except:
-                get_count[contents[2]] = 1
+        if len(contents) > 3:
+            if contents[1]=='recv':
+                try:
+                    give_count[contents[2]] += 1
+                except:
+                    give_count[contents[2]] = 1
+            elif contents[1]=='send':
+                try:
+                    get_count[contents[2]] += 1
+                except:
+                    get_count[contents[2]] = 1
     give_rank = sorted(give_count.items(), key = lambda kv:(kv[1], kv[0]), reverse=True)
     get_rank = sorted(get_count.items(), key = lambda kv:(kv[1], kv[0]), reverse=True)
     while len(give_rank) < 5:
@@ -156,7 +159,7 @@ try:
     setulogfile = open(setulogfolderdir + filename, 'r', encoding='utf-8')
     
 except:
-    filename = str(localtime[0]) + '-' + str(localtime[1]) + '-' + str(localtime[2]) + '.log'
+    filename = time.strftime("%Y-%m-%d", localtime) + '.log'
     logfile = open(logfolderdir + filename, 'r', encoding='utf-8')
     setulogfile = open(setulogfolderdir + filename, 'r', encoding='utf-8')
 

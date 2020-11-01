@@ -9,6 +9,7 @@ output:
 
 import sys
 import requests
+import random
 
 imgurl = sys.argv[1]
 imgname = sys.argv[2]#后缀
@@ -22,11 +23,13 @@ def saveImg(url):
 
 def downloadImg(url):
     r = requests.get(url)
-    return r.content
+    return r.content, r.headers['Content-Type'][6:]
 
 def Check_Baidu():
-    imgContent = downloadImg(imgurl)
-    if len(imgContent) < 5e3 or len(imgContent) > 1e7:
+    imgContent, imgType = downloadImg(imgurl)
+    if len(imgContent) < 5e3 or len(imgContent) > 4e6:
+        return
+    if imgType not in ['jpg', 'jpeg', 'png']:
         return
 
     from aip import AipImageCensor
@@ -34,6 +37,12 @@ def Check_Baidu():
     censor_APP_ID = '15708523'
     censor_API_KEY = '6USQY453ZVSjxYYej1F195IZ'
     censor_SECRET_KEY = 'r0rtrpRj8eHRnkPCfEhjOPRh2eO997Uv'
+
+    #另一个百度账号
+    if random.random() < 0:
+        censor_APP_ID = '22908418'
+        censor_API_KEY = 'Fz2zsXkSFmdH4BgcSwvGLeNP'
+        censor_SECRET_KEY = 'VSbOwvqUNzG1cDW89O9iTnnweLvLyGGM'
     
     #classify_APP_ID = '17981247'
     #classify_API_KEY = '3HuleW8fwIPymQcRM1DNhigp'
@@ -50,7 +59,7 @@ def Check_Baidu():
                 print('色图！', end='')
                 saveImg(imgurl)
                 break
-            elif each['class_name']=='卡通色情' and each['probability']>0.55:
+            elif each['class_name']=='卡通色情' and each['probability']>0.51:
                 print('色图！', end='')
                 saveImg(imgurl)
                 break
@@ -66,7 +75,7 @@ def Check_Baidu():
                 print('色图！', end='')
                 saveImg(imgurl)
                 break
-            elif each['class_name']=='低俗' and each['probability']>0.85:
+            elif each['class_name']=='低俗' and each['probability']>0.95:
                 print('色图！', end='')
                 saveImg(imgurl)
                 break
@@ -78,7 +87,7 @@ def Check_Baidu():
                 print('色图！', end='')
                 saveImg(imgurl)
                 break
-            elif each['class_name']=='卡通女性性感' and each['probability']>0.56:
+            elif each['class_name']=='卡通女性性感' and each['probability']>0.51:
                 print('色图！', end='')
                 saveImg(imgurl)
                 break
