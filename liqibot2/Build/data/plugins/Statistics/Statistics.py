@@ -1,6 +1,6 @@
 #-*coding:utf-8*-
 '''
-useage:
+usage:
     Statistics.py 
     Statistics.py 20201027
 output:

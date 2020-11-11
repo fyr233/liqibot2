@@ -1,0 +1,16 @@
+{
+    "active": true,
+    "triggers": [
+        "c",
+        "C",
+        "cpp",
+        "Cpp",
+        "CPP",
+        "c++",
+        "C++",
+        "python",
+        "Python",
+        "py",
+        "屁眼"
+        ]
+}

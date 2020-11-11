@@ -160,6 +160,7 @@
     <ClCompile Include="src\Message.cpp" />
     <ClCompile Include="src\MsgRouter.cpp" />
     <ClCompile Include="src\Permission.cpp" />
+    <ClCompile Include="src\plugins\Coding.cpp" />
     <ClCompile Include="src\plugins\Command.cpp" />
     <ClCompile Include="src\plugins\Default.cpp" />
     <ClCompile Include="src\plugins\RandomReply.cpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="src\Message.h" />
     <ClInclude Include="src\MsgRouter.h" />
     <ClInclude Include="src\Permission.h" />
+    <ClInclude Include="src\plugins\Coding.h" />
     <ClInclude Include="src\plugins\Command.h" />
     <ClInclude Include="src\plugins\Default.h" />
     <ClInclude Include="src\plugins\Plugin.h" />
