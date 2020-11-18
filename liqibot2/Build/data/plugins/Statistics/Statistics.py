@@ -139,7 +139,7 @@ def render(imgpath):
     cmd += ' --crop-h '+str(imgheight)
     cmd += ' --width '+str(imgwidth)
     cmd += ' --height '+str(imgheight)
-    cmd += ' --javascript-delay '+str(2000)
+    cmd += ' --javascript-delay '+str(4000)
     cmd += ' --enable-local-file-access'
     cmd += ' --quality 40'
     cmd += ' '+htmlpath+' '+imgpath
@@ -155,13 +155,13 @@ filename = ''
 try:
     date = sys.argv[1]
     filename = date[:4] + '-' + date[4:6] + '-' + date[6:8] + '.log'
-    logfile = open(logfolderdir + filename, 'r', encoding='utf-8')
-    setulogfile = open(setulogfolderdir + filename, 'r', encoding='utf-8')
+    logfile = open(logfolderdir + filename, 'r', encoding='utf-8', errors='ignore')
+    setulogfile = open(setulogfolderdir + filename, 'r', encoding='utf-8', errors='ignore')
     
 except:
     filename = time.strftime("%Y-%m-%d", localtime) + '.log'
-    logfile = open(logfolderdir + filename, 'r', encoding='utf-8')
-    setulogfile = open(setulogfolderdir + filename, 'r', encoding='utf-8')
+    logfile = open(logfolderdir + filename, 'r', encoding='utf-8', errors='ignore')
+    setulogfile = open(setulogfolderdir + filename, 'r', encoding='utf-8', errors='ignore')
 
 finally:
     #统计数据

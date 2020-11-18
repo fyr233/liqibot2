@@ -12,8 +12,32 @@ output:
 import docker
 import random
 import sys
+import threading
 
 from Config import config
+
+client = docker.from_env(timeout=config['client_timeout'])
+containers = []
+
+def time_out(second, callback=None):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            t =threading.Thread(target=func, args=args, kwargs=kwargs)
+            # 设置主线程技术子线程立刻结束
+            t.setDaemon(True)  
+            t.start()
+            # 主线程阻塞等待interval秒，又名：挂起 
+            t.join(second)
+            if t.is_alive() and callback:
+            	# 立即执行回调函数
+                return threading.Timer(0, callback).start()  
+            else:
+                return
+        return wrapper
+    return decorator
+
+def timeout_callback():
+    print('运行超时',end='')
 
 def cpuUsage(container):
     stats = container.stats(stream=False)
@@ -26,8 +50,6 @@ def memUsage(container):
     return stats["memory_stats"]["usage"] / stats["memory_stats"]["limit"]
 
 def getContainer():
-    client = docker.from_env()
-    containers = []
 
     for item in client.containers.list(all=True):
         if len(item.name)>10 and item.name[:11]=='liqi-Coding':
@@ -40,6 +62,7 @@ def getContainer():
             mem_limit=config['mem_limit'],
             volumes=config['volumes'],
             working_dir=config['working_dir'],
+            pids_limit=config['pids_limit'],
             detach=True,
             tty=True)
         containers.append(new_container)
@@ -57,23 +80,27 @@ def getContainer():
     rand_item.restart()
     return rand_item
 
+@time_out(config['client_timeout'], timeout_callback)
 def runC(container, file, params):
     run_cmd = "tcc -run " + "codes/" + file + " " + params
-    result = container.exec_run(run_cmd)
+    result = client.containers.get(container.short_id).exec_run(run_cmd)
     print(result[1].decode('utf-8'), end='')
 
+@time_out(config['client_timeout'], timeout_callback)
 def runPython(container, file, params):
     run_cmd = "python3 " + "codes/" + file + " " + params
-    result = container.exec_run(run_cmd)
+    result = client.containers.get(container.short_id).exec_run(run_cmd)
     print(result[1].decode('utf-8'), end='')
 
+@time_out(config['client_timeout'], timeout_callback)
 def runCpp(container, file, params):
     exec_file = ''.join(file.split('.')[:-1])
     compile_cmd = "g++ " + "codes/" + file + " -o " + exec_file
     run_cmd = "./" + exec_file + " " + params
-    container.exec_run(compile_cmd)
-    result = container.exec_run(run_cmd)
+    client.containers.get(container.short_id).exec_run(compile_cmd)
+    result = client.containers.get(container.short_id).exec_run(run_cmd)
     print(result[1].decode('utf-8'), end='')
+
 
 codetype = sys.argv[1]
 codefile = sys.argv[2]

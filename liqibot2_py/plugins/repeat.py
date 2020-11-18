@@ -1,4 +1,4 @@
-import parl
+#import parl
 
 def check(message):
     if message['sender']['id'] == 1325275429:

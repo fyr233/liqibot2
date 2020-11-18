@@ -1,6 +1,6 @@
 import multiprocessing
 from multiprocessing import Pipe
-import parl
+#import parl
 
 def check(message):
     if message['messageChain'][1]['text'] == 'begin':

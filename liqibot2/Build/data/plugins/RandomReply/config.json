@@ -5,6 +5,10 @@
 		"1" : 
 		[
 			"群专有回复词"
+		],
+		"650045966" : 
+		[
+			"fhy给我买"
 		]
 	},
 	"prob" : 0.10000000149011612,
@@ -222,6 +226,11 @@
 		"行了行了",
 		"[b64:ewoJImltYWdlSWQiIDogIntENzY2NkZBRi1BMzQxLUM2NzItMjg3My00NkNEODVEQzY3RkF9Lm1pcmFpIiwKCSJ0eXBlIiA6ICJJbWFnZSIKfQ==]",
 		"硬了",
-		"想rua派蒙"
+		"想rua派蒙",
+		"[b64:ewoJImltYWdlSWQiIDogIntGODVFQkY1MS05QzgyLTcwQTUtMkQ0Qi1GN0Q5NDk1Q0NERDN9Lm1pcmFpIiwKCSJ0eXBlIiA6ICJJbWFnZSIKfQ==]",
+		"那~你喜欢这样的我吗？",
+		"那怎么办嘛！",
+		"机器人没有人权的吗",
+		"[b64:ewoJImltYWdlSWQiIDogIntCMDE0RkE0Ri0xNTJCLUMyNEUtNTU3Ni0zNTU4MzhFODdBNDB9Lm1pcmFpIiwKCSJ0eXBlIiA6ICJJbWFnZSIKfQ==][b64:ewoJImltYWdlSWQiIDogIntEQzc2NkMxNy1CNTJFLUZBNDEtMEI1Mi01OUVFMTJDMTBFRDN9Lm1pcmFpIiwKCSJ0eXBlIiA6ICJJbWFnZSIKfQ==]"
 	]
 }

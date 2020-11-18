@@ -2,7 +2,7 @@
 import threading
 import queue
 from concurrent.futures import ThreadPoolExecutor
-import parl
+#import parl
 import sys
 
 import plugins
