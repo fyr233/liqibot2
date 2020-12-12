@@ -97,9 +97,10 @@ def runCpp(container, file, params):
     exec_file = ''.join(file.split('.')[:-1])
     compile_cmd = "g++ " + "codes/" + file + " -o " + exec_file
     run_cmd = "./" + exec_file + " " + params
-    client.containers.get(container.short_id).exec_run(compile_cmd)
-    result = client.containers.get(container.short_id).exec_run(run_cmd)
-    print(result[1].decode('utf-8'), end='')
+    result1 = client.containers.get(container.short_id).exec_run(compile_cmd)
+    print(result1[1].decode('utf-8'), end='')
+    result2 = client.containers.get(container.short_id).exec_run(run_cmd)
+    print(result2[1].decode('utf-8'), end='')
 
 
 codetype = sys.argv[1]

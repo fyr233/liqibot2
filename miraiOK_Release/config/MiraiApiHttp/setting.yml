@@ -3,10 +3,10 @@ cors:
 host: 0.0.0.0
 port: 8080
 authKey: 123456789
-cacheSize: 102400
+cacheSize: 10240
 enableWebsocket: true
 report: 
-  enable: true
+  enable: false
   groupMessage: 
     report: true
   friendMessage: 
@@ -20,7 +20,7 @@ report:
 {}
 
 heartbeat: 
-  enable: true
+  enable: false
   delay: 1000
   period: 15000
   destinations: []

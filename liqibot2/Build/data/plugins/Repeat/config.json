@@ -1,6 +1,6 @@
 {
 	"active" : true,
-	"default" : 0.1,
+	"default" : 0.05,
 	"group-config" : 
 	{
 		"1" : 1.0
