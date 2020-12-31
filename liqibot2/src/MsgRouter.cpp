@@ -17,6 +17,7 @@
 #include "plugins/Tex.h"
 #include "plugins/Statistics.h"
 #include "plugins/Coding.h"
+#include "plugins/YuanShen.h"
 
 MsgRouter::MsgRouter()
 {
@@ -29,7 +30,8 @@ MsgRouter::MsgRouter()
 		(Plugin*) new Setu(&rt_table_dynamic, &rt_table_static, &permission),
 		(Plugin*) new Tex(&rt_table_dynamic, &rt_table_static, &permission),
 		(Plugin*) new Statistics(&rt_table_dynamic, &rt_table_static, &permission),
-		(Plugin*) new Coding(&rt_table_dynamic, &rt_table_static, &permission)
+		(Plugin*) new Coding(&rt_table_dynamic, &rt_table_static, &permission),
+		(Plugin*) new YuanShen(&rt_table_dynamic, &rt_table_static, &permission)
 	};
 
 	std::cout << "ThreadPool size: " << 2 * std::thread::hardware_concurrency() << "\n";
