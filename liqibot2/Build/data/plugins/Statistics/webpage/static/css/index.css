@@ -71,11 +71,21 @@
   background:#141414;
 }
 
+.todayScoldRank{
+  position:absolute;
+  width:590px;
+  height:800px;
+  top:1810px;
+  left:1%;
+  margin: 0% 0 0 0%;
+  background:#141414;
+}
+
 .nowTime{
   position:absolute;
   width:1200px;
   height:30px;
-  top:1810px;
+  top:2620px;
   left:0%;
   right:0%;
   margin: 0% 0 0 0%;

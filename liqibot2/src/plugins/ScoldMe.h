@@ -18,6 +18,8 @@ public:
 	void onClose();
 
 private:
+	std::string logfolderpath = "data/plugins/ScoldMe/log/";
 
+	void addlog(std::string sendorrecv, Member m, std::string msg);
 	
 };

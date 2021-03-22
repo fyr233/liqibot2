@@ -17,18 +17,19 @@ import sys
 logfolderdir = 'data/logs/'
 setulogfolderdir = 'data/plugins/Setu/log/'
 setufolderdir = '../../miraiOK_Release/data/MiraiApiHttp/images/Setu/'
+scoldlogfolderdir = 'data/plugins/ScoldMe/log/'
 drawdatapath = 'data/plugins/Statistics/webpage/static/js/drawdata.js'
 htmlpath = 'data/plugins/Statistics/webpage/index.html'
 imgfolderdir = '../../miraiOK_Release/data/MiraiApiHttp/images/Statistics/'
 imgwidth = 1200
-imgheight = 1920
+imgheight = 2700
 
 localtime = time.localtime(time.time())
 
 def QQavatarurl(qq):
     return "http://q1.qlogo.cn/g?b=qq&nk=" + qq + "&s=640"
 
-def calculate(filename, logfile, setulogfile, outpath):
+def calculate(filename, logfile, setulogfile, scoldlogfile, outpath):
     
     staticDate = filename[:-4].replace('-', '/')
 
@@ -122,6 +123,31 @@ def calculate(filename, logfile, setulogfile, outpath):
         todaySetuGiveRank_data['count'].append(give_rank[i][1])
         todaySetuGetRank_data['image'].append(QQavatarurl(get_rank[i][0]))
         todaySetuGetRank_data['count'].append(get_rank[i][1])
+
+    #今日骂我榜
+    todayScoldRank_data = {
+        'image':[],
+        'count':[]
+    }
+    scold_count = {}
+    scoldlogfile.seek(0)
+    for eachline in scoldlogfile.readlines():
+        contents = eachline.split('\t')
+        if len(contents) > 3:
+            if contents[1]=='recv':
+                try:
+                    scold_count[contents[2]] += 1
+                except:
+                    scold_count[contents[2]] = 1
+
+    scold_rank = sorted(scold_count.items(), key = lambda kv:(kv[1], kv[0]), reverse=True)
+
+    while len(scold_rank) < 5:
+        scold_rank.append(('0', 0))
+
+    for i in range(5):
+        todayScoldRank_data['image'].append(QQavatarurl(scold_rank[i][0]))
+        todayScoldRank_data['count'].append(scold_rank[i][1])
         
     #写入drawdata.js文件
     with open(outpath, 'w', encoding='utf-8') as f:
@@ -132,6 +158,7 @@ def calculate(filename, logfile, setulogfile, outpath):
         f.write('hisSetuInc_data = ' + str(hisSetuInc_data) + ';\n\n')
         f.write('todaySetuGiveRank_data = ' + str(todaySetuGiveRank_data) + ';\n\n')
         f.write('todaySetuGetRank_data = ' + str(todaySetuGetRank_data) + ';\n\n')
+        f.write('todayScoldRank_data = ' + str(todayScoldRank_data) + ';\n\n')
 
 def render(imgpath):
     cmd = 'wkhtmltoimage'
@@ -157,15 +184,17 @@ try:
     filename = date[:4] + '-' + date[4:6] + '-' + date[6:8] + '.log'
     logfile = open(logfolderdir + filename, 'r', encoding='utf-8', errors='ignore')
     setulogfile = open(setulogfolderdir + filename, 'r', encoding='utf-8', errors='ignore')
+    scoldlogfile = open(scoldlogfolderdir + filename, 'r', encoding='utf-8', errors='ignore')
     
 except:
     filename = time.strftime("%Y-%m-%d", localtime) + '.log'
     logfile = open(logfolderdir + filename, 'r', encoding='utf-8', errors='ignore')
     setulogfile = open(setulogfolderdir + filename, 'r', encoding='utf-8', errors='ignore')
+    scoldlogfile = open(scoldlogfolderdir + filename, 'r', encoding='utf-8', errors='ignore')
 
 finally:
     #统计数据
-    calculate(filename, logfile, setulogfile, drawdatapath)
+    calculate(filename, logfile, setulogfile, scoldlogfile, drawdatapath)
 
     #渲染图片
     imgname = str(localtime[0]) + str(localtime[1]) + str(localtime[2]) + str(localtime[3]) + str(localtime[4]) + str(localtime[5])

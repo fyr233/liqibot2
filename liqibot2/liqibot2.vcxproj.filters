@@ -81,6 +81,12 @@
     <ClCompile Include="src\plugins\Coding.cpp">
       <Filter>源文件\plugins</Filter>
     </ClCompile>
+    <ClCompile Include="src\plugins\QandA.cpp">
+      <Filter>源文件\plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="src\plugins\YuanShen.cpp">
+      <Filter>源文件\plugins</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\web_api\api_mirai_http.h">
@@ -138,6 +144,12 @@
       <Filter>头文件\plugins</Filter>
     </ClInclude>
     <ClInclude Include="src\plugins\Coding.h">
+      <Filter>头文件\plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="src\plugins\QandA.h">
+      <Filter>头文件\plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="src\plugins\YuanShen.h">
       <Filter>头文件\plugins</Filter>
     </ClInclude>
   </ItemGroup>

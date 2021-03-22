@@ -6,6 +6,7 @@ var Chart_todaySetuInc = echarts.init(document.getElementById('todaySetuInc'), '
 var Chart_hisSetuInc = echarts.init(document.getElementById('hisSetuInc'), 'reddark');
 var Chart_todaySetuGiveRank = echarts.init(document.getElementById('todaySetuGiveRank'), 'reddark');
 var Chart_todaySetuGetRank = echarts.init(document.getElementById('todaySetuGetRank'), 'reddark');
+var Chart_todayScoldRank = echarts.init(document.getElementById('todayScoldRank'), 'reddark');
 var Chart_nowTime = echarts.init(document.getElementById('nowTime'), 'reddark');
 
 // 指定图表的配置项和数据
@@ -533,6 +534,142 @@ Chart_todaySetuGetRank.setOption(option = {
                 }
             },
             data: todaySetuGetRank_data['count']
+        },
+    ]
+});
+
+Chart_todayScoldRank.setOption(option = {
+    title: {
+        text: '今日被骂榜',
+        textStyle:{
+            fontSize: 32,
+            fontFamily: "'Microsoft YaHei', '微软雅黑', Arial, Verdana, 'sans-serif'",
+        },
+        left: 'center',
+        padding: 20
+    },
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'shadow'
+        }
+    },
+    grid: {
+        left:110,
+        top:70,
+    },
+    toolbox: {
+        show: false,
+        feature: {
+            saveAsImage: {}
+        }
+    },
+    xAxis: {
+        type: 'value',
+        name: '次',
+        axisLabel: {
+            formatter: '{value}',
+            textStyle: {
+                color: '#EEEEEE',
+                fontSize:18,
+                fontFamily: "'Microsoft YaHei', '微软雅黑', Arial, Verdana, 'sans-serif'",
+            }
+        }
+    },
+    yAxis: {
+        type: 'category',
+        inverse: true,
+        data: ['1', '2', '3', '4', '5'],
+        axisLabel: {
+            formatter: function (value) {
+                return '{' + value + '| }\n{value|' + value + '}';
+            },
+            textStyle: {
+                color: '#EEEEEE',
+                fontSize:18,
+                fontFamily: "'Microsoft YaHei', '微软雅黑', Arial, Verdana, 'sans-serif'",
+            },
+            margin: 20,
+            rich: {
+                value: {
+                    lineHeight: 30,
+                    align: 'center',
+                    textStyle: {
+                        color: '#EEEEEE',
+                        fontSize:18,
+                        fontFamily: "'Microsoft YaHei', '微软雅黑', Arial, Verdana, 'sans-serif'",
+                    }
+                },
+                1: {
+                    height: 70,
+                    align: 'center',
+                    backgroundColor: {
+                        image: todayScoldRank_data['image'][0]
+                    }
+                },
+                2: {
+                    height: 70,
+                    align: 'center',
+                    backgroundColor: {
+                        image: todayScoldRank_data['image'][1]
+                    }
+                },
+                3: {
+                    height: 70,
+                    align: 'center',
+                    backgroundColor: {
+                        image: todayScoldRank_data['image'][2]
+                    }
+                },
+                4: {
+                    height: 70,
+                    align: 'center',
+                    backgroundColor: {
+                        image: todayScoldRank_data['image'][3]
+                    }
+                },
+                5: {
+                    height: 70,
+                    align: 'center',
+                    backgroundColor: {
+                        image: todayScoldRank_data['image'][4]
+                    }
+                }
+            }
+        }
+    },
+    animation: false,
+    visualMap: {
+        show: false,
+        orient: 'horizontal',
+        left: 'center',
+        min: 0,
+        max: todayScoldRank_data['count'][0],
+        //text: ['High Score', 'Low Score'],
+        // Map the score column to color
+        dimension: 0,
+        //inRange: {
+        //    color: ['#D7DA8B', '#E15457']
+        //}
+    },
+    series: [
+        {
+            name: 'SetuGiveRank',
+            type: 'bar',
+            label: {
+                normal: {
+                    show: true,
+                    textBorderColor: '#333',
+                    textBorderWidth: 2,
+                    //fontSize: 20,
+                    textStyle: {
+                        color: '#000000',
+                        fontSize:30,
+                        fontFamily: "'Microsoft YaHei', '微软雅黑', Arial, Verdana, 'sans-serif'",
+                    }
+                }
+            },
+            data: todayScoldRank_data['count']
         },
     ]
 });

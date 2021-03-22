@@ -67,6 +67,7 @@ void ScoldMe::run(Message msg, QQApi* qqApi_ptr)
 	std::string s = config["replies"][dist(gen)].asString();
 	std::cout << "ScoldMe: " << s << "\n";
 	qqApi_ptr->sendMessage(msg.member, 0, s);
+	addlog("recv", msg.member, dumpsJson(msg.msgChain.toJson(), false));
 }
 
 void ScoldMe::onCommand(Message msg, std::string s, QQApi* qqApi_ptr)
@@ -195,4 +196,34 @@ void ScoldMe::onCommand(Message msg, std::string s, QQApi* qqApi_ptr)
 void ScoldMe::onClose()
 {
 	saveConfig();
+}
+
+void ScoldMe::addlog(std::string sendorrecv, Member m, std::string msg)
+{
+	time_t now = time(0);
+	tm ltm;
+	localtime_s(&ltm, &now);
+
+	std::string year = std::to_string(1900 + ltm.tm_year);
+	std::string mon = 1 + ltm.tm_mon > 9 ? std::to_string(1 + ltm.tm_mon) : "0" + std::to_string(1 + ltm.tm_mon);
+	std::string day = ltm.tm_mday > 9 ? std::to_string(ltm.tm_mday) : "0" + std::to_string(ltm.tm_mday);
+
+	std::string filepath =
+		logfolderpath + year + "-"
+		+ mon + "-"
+		+ day + ".log";
+
+	std::string hour = ltm.tm_hour > 9 ? std::to_string(ltm.tm_hour) : "0" + std::to_string(ltm.tm_hour);
+	std::string min = ltm.tm_min > 9 ? std::to_string(ltm.tm_min) : "0" + std::to_string(ltm.tm_min);
+	std::string sec = ltm.tm_sec > 9 ? std::to_string(ltm.tm_sec) : "0" + std::to_string(ltm.tm_sec);
+
+	std::string log =
+		hour + ":" + min + ":" + sec
+		+ "\t" + sendorrecv
+		+ "\t" + std::to_string(m.id) + "\t" + std::to_string(m.group.id)
+		+ "\t" + msg + "\n";
+
+	std::ofstream f(filepath, std::ios_base::app);
+	f << log;
+	f.close();
 }
