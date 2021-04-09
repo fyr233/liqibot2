@@ -9,7 +9,7 @@ config={
             'bind': '/home/root/codes',
             'mode': 'ro'
         },
-        os.getcwd() + '/../../miraiOK_Release/data/MiraiApiHttp/images/Coding': {
+        os.getcwd() + '/../../mcl-1.0.5/data/net.mamoe.mirai-api-http/images/Coding': {
             'bind': '/mnt/images',
             'mode': 'rw'
         }

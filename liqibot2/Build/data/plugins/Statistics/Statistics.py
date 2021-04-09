@@ -16,11 +16,11 @@ import sys
 
 logfolderdir = 'data/logs/'
 setulogfolderdir = 'data/plugins/Setu/log/'
-setufolderdir = '../../miraiOK_Release/data/MiraiApiHttp/images/Setu/'
+setufolderdir = '../../mcl-1.0.5/data/net.mamoe.mirai-api-http/images/Setu/'
 scoldlogfolderdir = 'data/plugins/ScoldMe/log/'
 drawdatapath = 'data/plugins/Statistics/webpage/static/js/drawdata.js'
 htmlpath = 'data/plugins/Statistics/webpage/index.html'
-imgfolderdir = '../../miraiOK_Release/data/MiraiApiHttp/images/Statistics/'
+imgfolderdir = '../../mcl-1.0.5/data/net.mamoe.mirai-api-http/images/Statistics/'
 imgwidth = 1200
 imgheight = 2700
 

@@ -12,7 +12,7 @@ import requests
 import pyvips
 
 url = 'https://www.zhihu.com/equation'
-imgfolderdir = '../../miraiOK_Release/data/MiraiApiHttp/images/Tex/'
+imgfolderdir = '../../mcl-1.0.5/data/net.mamoe.mirai-api-http/images/Tex/'
 
 headers = {
     'accept': 'image/avif,image/webp,image/apng,image/*,*/*;q=0.8',

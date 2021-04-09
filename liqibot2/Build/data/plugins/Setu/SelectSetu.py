@@ -10,10 +10,10 @@ import os
 import random
 import time
 
-imgfolderdir = '../../miraiOK_Release/data/MiraiApiHttp/images/Setu/'
+imgfolderdir = '../../mcl-1.0.5/data/net.mamoe.mirai-api-http/images/Setu/'
 
 localtime = time.localtime(time.time())
-if localtime[3] < 4 or localtime[3] > 20:
+if localtime[3] < 4 or localtime[3] > 22:
     filenames = os.listdir(imgfolderdir)
     index = random.randint(0, len(filenames)-1)
     print('Setu/' + filenames[index])

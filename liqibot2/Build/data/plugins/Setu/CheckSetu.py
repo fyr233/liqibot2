@@ -14,7 +14,7 @@ import random
 imgurl = sys.argv[1]
 imgname = sys.argv[2]#后缀
 
-imgfolderdir = '../../miraiOK_Release/data/MiraiApiHttp/images/Setu/'
+imgfolderdir = '../../mcl-1.0.5/data/net.mamoe.mirai-api-http/images/Setu/'
 
 def saveImg(url):
     r = requests.get(url)
