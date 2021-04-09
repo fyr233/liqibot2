@@ -1,3 +1,3 @@
 @echo off
-set JAVA_BINARY="C:\Users\liqi\Documents\GitHub\liqibot2\mcl-1.0.5\java\bin\java.exe"
+set JAVA_BINARY=java
 %JAVA_BINARY% -jar mcl.jar %*

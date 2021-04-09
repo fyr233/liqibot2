@@ -4,6 +4,12 @@
   "maven_repo": "https://maven.aliyun.com/repository/public",
   "packages": [
     {
+      "id": "org.bouncycastle:bcprov-jdk15on",
+      "channel": "stable",
+      "version": "1.64",
+      "type": "libs"
+    },
+    {
       "id": "net.mamoe:mirai-console",
       "channel": "beta",
       "version": "2.6-M2",
