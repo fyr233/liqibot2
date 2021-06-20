@@ -166,7 +166,7 @@ def render(imgpath):
     cmd += ' --crop-h '+str(imgheight)
     cmd += ' --width '+str(imgwidth)
     cmd += ' --height '+str(imgheight)
-    cmd += ' --javascript-delay '+str(4000)
+    cmd += ' --javascript-delay '+str(7000)
     cmd += ' --enable-local-file-access'
     cmd += ' --quality 40'
     cmd += ' '+htmlpath+' '+imgpath

@@ -45,8 +45,9 @@ MsgRouter::~MsgRouter()
 void MsgRouter::onReceived(std::string s, QQApi* qqApi_ptr)
 {
 
-	Message msg = Message::fromJson(parseJson(s));
+	Message msg = Message::fromJson(parseJson(s)["data"]);
 	//msg.msgChain.print();
+	//std::cout << parseJson(s) << "\n";
 
 	switch (msg.type)
 	{

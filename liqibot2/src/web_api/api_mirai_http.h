@@ -20,8 +20,8 @@ public:
 
 	Json::Value about();
 	int connect();
-	int auth();
 	int verify();
+	int bind();
 	int release();
 
 	int64 sendMessage(Member member, int64 quote, std::string s);
@@ -62,7 +62,7 @@ public:
 	std::string host;
 	std::string http_url;
 	std::string ws_url;
-	std::string authKey;
+	std::string verifyKey;
 	std::string sessionKey = "";
 	int64 qq;
 

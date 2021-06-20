@@ -14,7 +14,7 @@ QQApi::QQApi()
 			"qq": 2155679839,
 			"host": "localhost",
 			"port": 8080,
-			"authKey": "123456789"
+			"verifyKey": "123456789"
 		}
 		)"";
 
@@ -25,7 +25,7 @@ QQApi::QQApi()
 	qq = config["qq"].asInt64();
 	host = config["host"].asString();
 	port = config["port"].asInt();
-	authKey = config["authKey"].asString();
+	verifyKey = config["verifyKey"].asString();
 	http_url = std::string("http://") + host + ":" + std::to_string(port);
 	ws_url = std::string("ws://") + host + ":" + std::to_string(port);
 }
@@ -64,9 +64,9 @@ Json::Value QQApi::about()
 
 int QQApi::connect()
 {
-	if (auth() == 0)
+	if (verify() == 0)
 	{
-		if (verify() == 0)
+		if (bind() == 0)
 		{
 			return 0;
 		}
@@ -74,12 +74,12 @@ int QQApi::connect()
 	return -1;
 }
 
-int QQApi::auth()
+int QQApi::verify()
 {
 	Json::Value d;
-	d["authKey"] = authKey;
+	d["verifyKey"] = verifyKey;
 
-	Requests r = Requests::post(http_url + "/auth", dumpsJson(d));
+	Requests r = Requests::post(http_url + "/verify", dumpsJson(d));
 	if (r.code == 200)
 	{
 		Json::Value res = parseJson(r.text);
@@ -94,19 +94,19 @@ int QQApi::auth()
 	return -1;
 }
 
-int QQApi::verify()
+int QQApi::bind()
 {
 	Json::Value d;
 	d["sessionKey"] = sessionKey;
 	d["qq"] = this->qq;
 
-	Requests r = Requests::post(http_url + "/verify", dumpsJson(d));
+	Requests r = Requests::post(http_url + "/bind", dumpsJson(d));
 	if (r.code == 200)
 	{
 		Json::Value res = parseJson(r.text);
 		if (res["code"].asInt() == 0)
 		{
-			std::cout << "verify success" << "\n";
+			std::cout << "bind success" << "\n";
 			return 0;
 		}
 		return res["code"].asInt();
@@ -227,6 +227,7 @@ int64 QQApi::sendGroupMessage(int64 group, int64 quote, MessageChain msgChain)
 		d["quote"] = quote;
 	}
 
+	//std::cout << dumpsJson(d, false) << std::endl;
 	Requests r = Requests::post(http_url + "/sendGroupMessage", dumpsJson(d));
 	if (r.code == 200)
 	{
@@ -235,6 +236,10 @@ int64 QQApi::sendGroupMessage(int64 group, int64 quote, MessageChain msgChain)
 		{
 			Log::add("send", dumpsJson(d, false), this->qq);
 			return res["messageId"].asInt64();
+		}
+		else
+		{
+			std::cout << res["msg"] << std::endl;
 		}
 		return res["code"].asInt();
 	}
@@ -470,7 +475,7 @@ Json::Value QQApi::getSessionConfig()
 void QQApi::startListen(std::function<void(std::string, QQApi* qqApi)> onReceived)
 {
 	this->onReceived = onReceived;
-	auto ws = std::make_shared<WebSocket>(ws_url + "/all?sessionKey=" + sessionKey,
+	auto ws = std::make_shared<WebSocket>(ws_url + "/all?" + "verifyKey=" + verifyKey + "&qq=" + std::to_string( qq),
 		[this]() {this->onHandshake(); },
 		[this](std::string s) {this->onMessage(s); }, 
 		[this](std::string s) {this->onErr(s); }, 
@@ -486,7 +491,7 @@ void QQApi::onHandshake()
 
 void QQApi::onMessage(std::string s)
 {
-	//std::cout << s << "\n";
+	std::cout << s << "\n";
 	
 	(onReceived)(s, this);
 }

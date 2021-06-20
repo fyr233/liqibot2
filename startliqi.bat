@@ -1,3 +1,3 @@
 start mcl.bat
-TIMEOUT /T 5
+TIMEOUT /T 10
 start liqibot2.bat

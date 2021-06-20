@@ -25,7 +25,7 @@ Setu::Setu(std::vector<Plugin*>* rt_tb_dy_ptr, std::vector<Plugin*>* rt_tb_st_pt
 	std::string conf = u8R""(
 		{
 			"active": true,
-			"SetuDir": "../../miraiOK_Release/data/MiraiApiHttp/images/Setu/",
+			"ImgDir": "data/net.mamoe.mirai-api-http/images/",
 			"triggers": [
 				"色图"
 				],
@@ -117,9 +117,9 @@ void Setu::run(Message msg, QQApi* qqApi_ptr)
 					MessageChain mc;
 					for (auto imgfile : imgfilelist)
 					{
-						MessageChain::AMessage a;
-						a.type = MessageChain::AMessage::Image;
-						a.path = imgfile;
+						AMessage a;
+						a.type = AMessage::Image;
+						a.Image_path = config["ImgDir"].asString() + imgfile;
 
 						mc.chain.push_back(a);
 					}
@@ -146,25 +146,9 @@ void Setu::run(Message msg, QQApi* qqApi_ptr)
 
 	//不是色图触发词，执行色图检测
 	//遍历消息链
-	for (int i = 0; i < msg.msgChain.chain.size(); i++)
-	{
-		if (msg.msgChain.chain[i].type == MessageChain::AMessage::Image)
-		{
-			//获取url
-			std::string url = msg.msgChain.chain[i].url;
-			//获取imageId
-			std::string imageId = msg.msgChain.chain[i].imageId;
-			//调用CheckSetu.py，传入url和imgid
-			std::string ans = SubProcess::popen("python data/plugins/Setu/CheckSetu.py \"" + url + "\" " + imageId);
-			if (ans.size() > 0)
-			{
-				qqApi_ptr->sendMessage(msg.member, 0, ansi_to_utf8(ans));
-				addlog("recv", msg.member, dumpsJson(msg.msgChain.chain[i].toJson(), false));
-			}
-		}
-	}
-	
-
+	//std::cout << dumpsJson(msg.toJson()) << "\n";
+	auto ans = checkSetu(msg.msgChain, msg.member, qqApi_ptr);
+	qqApi_ptr->sendMessage(msg.member, 0, ans);
 }
 
 void Setu::onCommand(Message msg, std::string s, QQApi* qqApi_ptr)
@@ -229,19 +213,19 @@ void Setu::onCommand(Message msg, std::string s, QQApi* qqApi_ptr)
 			MessageChain mc = MessageChain::fromString(b64);
 			for (int i = 0; i < mc.chain.size(); i++)
 			{
-				if (mc.chain[i].type == MessageChain::AMessage::Image)
+				if (mc.chain[i].type == AMessage::Image)
 				{
 					for (int j = 0; j < msg.msgChain.chain.size(); j++)
 					{
-						if (msg.msgChain.chain[j].type == MessageChain::AMessage::Image && msg.msgChain.chain[j].imageId == mc.chain[i].imageId)
+						if (msg.msgChain.chain[j].type == AMessage::Image && msg.msgChain.chain[j].Image_imageId == mc.chain[i].Image_imageId)
 						{
 							//下载图片
 							//TO DO: get函数存在bug，未修复
-							Requests r = Requests::get(msg.msgChain.chain[j].url);
+							Requests r = Requests::get(msg.msgChain.chain[j].Image_url);
 
 							std::cout << msg.msgChain.chain[j].toJson() << "\n";
 							std::cout << "\n" << r.text << "\n";
-							std::ofstream outfile(config["SetuDir"].asString() + msg.msgChain.chain[j].imageId + "." + r.content_type.substr(6));
+							std::ofstream outfile(config["SetuDir"].asString() + msg.msgChain.chain[j].Image_imageId + "." + r.content_type.substr(6));
 							outfile << r.text;
 							outfile.close();
 
@@ -348,4 +332,35 @@ void Setu::addlog(std::string sendorrecv, Member m, std::string image)
 	std::ofstream f(filepath, std::ios_base::app);
 	f << log;
 	f.close();
+}
+
+std::string Setu::checkSetu(MessageChain Chain, Member member, QQApi* qqApi_ptr)
+{
+	std::string result = "";
+	for (int i = 0; i < Chain.chain.size(); i++)
+	{
+		if (Chain.chain[i].type == AMessage::Image)
+		{
+			//获取url
+			std::string url = Chain.chain[i].Image_url;
+			//获取imageId
+			std::string imageId = Chain.chain[i].Image_imageId;
+			//调用CheckSetu.py，传入url和imgid
+			std::string ans = SubProcess::popen("python data/plugins/Setu/CheckSetu.py \"" + url + "\" " + imageId);
+			if (ans.size() > 0)
+			{
+				result += ansi_to_utf8(ans);
+				addlog("recv", member, dumpsJson(Chain.chain[i].toJson(), false));
+			}
+		}
+		else if (Chain.chain[i].type == AMessage::Forward)
+		{
+			for (int j = 0; j < Chain.chain[i].Forward_nodeList.size(); j++)
+			{
+				result += checkSetu(*(Chain.chain[i].Forward_nodeList[j].messageChain), member, qqApi_ptr);
+			}
+		}
+	}
+
+	return result;
 }

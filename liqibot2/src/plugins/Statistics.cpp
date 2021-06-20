@@ -20,6 +20,7 @@ Statistics::Statistics(std::vector<Plugin*>* rt_tb_dy_ptr, std::vector<Plugin*>*
 	std::string conf = u8R""(
 		{
 			"active": true,
+			"ImgDir": "data/net.mamoe.mirai-api-http/images/",
 			"triggers": [
 				"Í³¼Æ"
 				],
@@ -75,9 +76,9 @@ void Statistics::run(Message msg, QQApi* qqApi_ptr)
 	MessageChain mc;
 	for (auto imgfile : imgfilelist)
 	{
-		MessageChain::AMessage a;
-		a.type = MessageChain::AMessage::Image;
-		a.path = imgfile;
+		AMessage a;
+		a.type = AMessage::Image;
+		a.Image_path = config["ImgDir"].asString() + imgfile;
 
 		mc.chain.push_back(a);
 	}

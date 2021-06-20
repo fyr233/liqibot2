@@ -1,6 +1,6 @@
 {
     "active": true,
-    "TexDir": "../../miraiOK_Release/data/MiraiApiHttp/images/Tex/",
+    "ImgDir": "data/net.mamoe.mirai-api-http/images/",
     "triggers": [
         "tex",
         "latex"

@@ -38,6 +38,7 @@ Default::~Default()
 
 float Default::metric(Message msg)
 {
+	//std::cout << dumpsJson(msg.toJson(), false) << "\n";
 	if (config["active"].asBool())
 	{
 		switch (msg.type)
@@ -55,6 +56,7 @@ float Default::metric(Message msg)
 
 void Default::run(Message msg, QQApi* qqApi_ptr)
 {
+	
 	if (repeat_ptr == nullptr || randomReply_ptr == nullptr)
 	{
 		for (int i = 0; i < (*rt_tb_st_ptr).size(); i++)

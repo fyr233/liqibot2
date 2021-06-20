@@ -23,4 +23,5 @@ private:
 
 	void addlog(std::string sendorrecv, Member m, std::string image);
 
+	std::string checkSetu(MessageChain Chain, Member member, QQApi* qqApi_ptr);
 };

@@ -51,7 +51,33 @@ void Member::print()
 
 Json::Value Member::toJson()
 {
-	return Json::Value();
+	Json::Value v;
+	v["id"] = id;
+	if (group.id != 0)
+	{
+		v["memberName"] = memberName;
+		v["group"] = group.toJson();
+		switch (permission)
+		{
+		case Member::MEMBER:
+			v["permission"] = "MEMBER";
+			break;
+		case Member::ADMINISTRATOR:
+			v["permission"] = "ADMINISTRATOR";
+			break;
+		case Member::OWNER:
+			v["permission"] = "OWNER";
+			break;
+		default:
+			break;
+		}
+	}
+	else
+	{
+		v["nickName"] = nickname;
+		v["remark"] = remark;
+	}
+	return v;
 }
 
 Member Member::fromJson(Json::Value v)
@@ -98,7 +124,7 @@ void MessageChain::print()
 	{
 		if (chain[i].type == AMessage::Plain)
 		{
-			s += chain[i].text;
+			s += chain[i].Plain_text;
 		}
 	}
 	std::cout << s << "\n";
@@ -135,7 +161,7 @@ std::string MessageChain::toString()
 		switch (chain[i].type)
 		{
 		case AMessage::Plain:
-			s += chain[i].text;
+			s += chain[i].Plain_text;
 			break;
 
 		case AMessage::Image:
@@ -169,7 +195,7 @@ MessageChain MessageChain::fromString(std::string s)
 		{
 			AMessage a;
 			a.type = AMessage::Plain;
-			a.text = m.prefix().str();
+			a.Plain_text = m.prefix().str();
 			mc.chain.push_back(a);
 		}
 
@@ -184,7 +210,7 @@ MessageChain MessageChain::fromString(std::string s)
 	{
 		AMessage a;
 		a.type = AMessage::Plain;
-		a.text = std::string(pos, end);
+		a.Plain_text = std::string(pos, end);
 		mc.chain.push_back(a);
 	}
 	//std::cout << dumpsJson(mc.toJson()) << "\n";
@@ -209,7 +235,7 @@ Json::Value Message::toJson()
 		break;
 
 	case Message::GroupMessage:
-		v["type"] = "FriendMessage";
+		v["type"] = "GroupMessage";
 		v["sender"] = member.toJson();
 		v["messageChain"] = msgChain.toJson();
 		break;
@@ -225,6 +251,7 @@ Json::Value Message::toJson()
 Message Message::fromJson(Json::Value v)
 {
 	Message m;
+	//std::cout << v["type"].asString().c_str() << "\n";
 	switch (stringhash_run_time(v["type"].asString().c_str()))
 	{
 	case "GroupMessage"_hash:
@@ -242,33 +269,85 @@ Message Message::fromJson(Json::Value v)
 	default:
 		break;
 	}
-
+	
 	return m;
 }
 
-Json::Value MessageChain::AMessage::toJson()
+AMessage::AMessage()
+{
+}
+
+AMessage::~AMessage()
+{
+}
+
+Json::Value AMessage::toJson()
 {
 	Json::Value v;
 	switch (type)
 	{
 	case AMessage::Source:
 		v["type"] = "Source";
-		v["id"] = id;
-		v["time"] = time;
+		v["id"] = Source_id;
+		v["time"] = Source_time;
 		break;
 
+	case AMessage::Quote:
+		v["type"] = "Quote";
+		v["id"] = Quote_id;
+		v["groupId"] = Quote_groupId;
+		v["senderId"] = Quote_senderId;
+		v["targetId"] = Quote_targetId;
+		v["origin"] = (*Quote_origin).toJson();
+		break;
+
+	case AMessage::At:
+		break;
+	case AMessage::AtAll:
+		break;
+	case AMessage::Face:
+		break;
 	case AMessage::Plain:
 		v["type"] = "Plain";
-		v["text"] = text;
+		v["text"] = Plain_text;
 		break;
 
 	case AMessage::Image:
 		v["type"] = "Image";
-		v["imageId"] = imageId;
-		v["url"] = url;
-		v["path"] = path;
+		v["imageId"] = Image_imageId;
+		v["url"] = Image_url;
+		v["path"] = Image_path;
 		break;
 
+	case AMessage::FlashImage:
+		break;
+	case AMessage::Voice:
+		break;
+	case AMessage::Xml:
+		break;
+	case AMessage::Json:
+		break;
+	case AMessage::App:
+		break;
+	case AMessage::Poke:
+		break;
+	case AMessage::Forward:
+		v["type"] = "Forward";
+		v["title"] = Forward_title;
+		v["brief"] = Forward_brief;
+		v["source"] = Forward_source;
+		v["summary"] = Forward_summary;
+		for (int i = 0; i < Forward_nodeList.size(); i++)
+		{
+			v["nodeList"][i]["senderId"] = Forward_nodeList[i].senderId;
+			v["nodeList"][i]["time"] = Forward_nodeList[i].time;
+			v["nodeList"][i]["senderName"] = Forward_nodeList[i].senderName;
+			v["nodeList"][i]["messageChain"] = (*(Forward_nodeList[i].messageChain)).toJson();
+		}
+		break;
+
+	case AMessage::File:
+		break;
 	default:
 		break;
 	}
@@ -276,27 +355,56 @@ Json::Value MessageChain::AMessage::toJson()
 	return v;
 }
 
-MessageChain::AMessage MessageChain::AMessage::fromJson(Json::Value v)
+AMessage AMessage::fromJson(Json::Value v)
 {
 	AMessage a;
 	switch (stringhash_run_time(v["type"].asString().c_str()))
 	{
 	case "Source"_hash:
 		a.type = AMessage::Source;
-		a.id = v["id"].asInt64();
-		a.time = v["time"].asInt64();
+		a.Source_id = v["id"].asInt64();
+		a.Source_time = v["time"].asInt64();
+		break;
+
+	case "Quote"_hash:
+		a.type = AMessage::Quote;
+		a.Quote_id = v["id"].asInt64();
+		a.Quote_groupId = v["groupId"].asInt64();
+		a.Quote_senderId = v["senderId"].asInt64();
+		a.Quote_targetId = v["targetId"].asInt64();
+		a.Quote_origin = std::make_shared<MessageChain>();
+		*(a.Quote_origin) = MessageChain::fromJson(v["origin"]);
 		break;
 
 	case "Plain"_hash:
 		a.type = AMessage::Plain;
-		a.text = v["text"].asString();
+		a.Plain_text = v["text"].asString();
 		break;
 
 	case "Image"_hash:
 		a.type = AMessage::Image;
-		a.imageId = v["imageId"].asString();
-		a.url = v["url"].asString();
-		a.path = v["path"].asString();
+		a.Image_imageId = v["imageId"].asString();
+		a.Image_url = v["url"].asString();
+		a.Image_path = v["path"].asString();
+		break;
+
+	case "Forward"_hash:
+		a.type = AMessage::Forward;
+		a.Forward_title = v["title"].asString();
+		a.Forward_brief = v["brief"].asString();
+		a.Forward_source = v["source"].asString();
+		a.Forward_summary = v["summary"].asString();
+		for (int i = 0; i < v["nodeList"].size(); i++)
+		{
+			Node n;
+			n.senderId = v["nodeList"][i]["senderId"].asInt64();
+			n.time = v["nodeList"][i]["time"].asInt64();
+			n.senderName = v["nodeList"][i]["senderName"].asString();
+			n.messageChain = std::make_shared<MessageChain>();
+			*(n.messageChain) = MessageChain::fromJson(v["nodeList"][i]["messageChain"]);
+
+			a.Forward_nodeList.push_back(n);
+		}
 		break;
 
 	default:

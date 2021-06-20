@@ -7,6 +7,8 @@
 
 #include "Tools.h"
 
+class MessageChain;
+class AMessage;
 
 class Group
 {
@@ -61,6 +63,90 @@ private:
 
 };
 
+class AMessage
+{
+public:
+	enum Type
+	{
+		Source,
+		Quote,
+		At,
+		AtAll,
+		Face,
+		Plain,
+		Image,
+		FlashImage,
+		Voice,
+		Xml,
+		Json,
+		App,
+		Poke,
+		Forward,
+		File
+	};
+
+	Type type;
+
+	AMessage();
+	~AMessage();
+	Json::Value toJson();
+	static AMessage fromJson(Json::Value v);
+	std::string toString();
+	static AMessage fromString(std::string s);
+
+	int64 Source_id;
+	int64 Source_time;
+
+	int64 Quote_id;
+	int64 Quote_groupId;
+	int64 Quote_senderId;
+	int64 Quote_targetId;
+	std::shared_ptr<MessageChain> Quote_origin = nullptr;
+
+	int64 At_target;
+	std::string At_display;
+
+	int64 Face_faceId;
+	std::string Face_name;
+
+	std::string Plain_text;
+
+	std::string Image_imageId;
+	std::string Image_url;
+	std::string Image_path;
+
+	std::string FlashImage_imageId;
+	std::string FlashImage_url;
+	std::string FlashImage_path;
+
+	std::string Voice_voiceId;
+	std::string Voice_url;
+	std::string Voice_path;
+
+	std::string Xml_xml;
+
+	std::string Poke_name;
+
+	struct Node
+	{
+		int64 senderId;
+		int64 time;
+		std::string senderName;
+		std::shared_ptr<MessageChain> messageChain;
+	};
+
+	std::string Forward_title;
+	std::string Forward_brief;
+	std::string Forward_source;
+	std::string Forward_summary;
+	std::vector<Node> Forward_nodeList;
+
+	std::string File_id;
+	int64 File_internalId;
+	std::string File_name;
+	int64 File_size;
+};
+
 class MessageChain
 {
 public:
@@ -73,31 +159,7 @@ public:
 	std::string toString();
 	static MessageChain fromString(std::string s);
 
-public: struct AMessage
-	{
-		enum Type
-		{
-			Source,
-			Plain,
-			Image,
-		};
-
-		Type type;
-
-		int64 id;
-		int64 time;
-
-		std::string text;
-
-		std::string imageId;
-		std::string url;
-		std::string path;
-
-		Json::Value toJson();
-		static AMessage fromJson(Json::Value v);
-		std::string toString();
-		static AMessage fromString(std::string s);
-	};
+public: 
 
 	std::vector<AMessage> chain;
 
