@@ -148,7 +148,11 @@ void Setu::run(Message msg, QQApi* qqApi_ptr)
 	//遍历消息链
 	//std::cout << dumpsJson(msg.toJson()) << "\n";
 	auto ans = checkSetu(msg.msgChain, msg.member, qqApi_ptr);
-	qqApi_ptr->sendMessage(msg.member, 0, ans);
+	if (! ans.empty())
+	{
+		qqApi_ptr->sendMessage(msg.member, 0, ans);
+	}
+	
 }
 
 void Setu::onCommand(Message msg, std::string s, QQApi* qqApi_ptr)
