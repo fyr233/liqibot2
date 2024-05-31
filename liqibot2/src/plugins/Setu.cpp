@@ -76,73 +76,77 @@ float Setu::metric(Message msg)
 void Setu::run(Message msg, QQApi* qqApi_ptr)
 {
 	//判断是否是色图触发词
-	if (msg.type == Message::FriendMessage || msg.type == Message::GroupMessage)
+	if (config["active"].asBool())
 	{
-		std::string s = msg.msgChain.toString();
-
-		for (int i = 0; i < config["triggers"].size(); i++)
+		if (msg.type == Message::FriendMessage || msg.type == Message::GroupMessage)
 		{
-			std::string command = config["triggers"][i].asString();
-			//std::cout << s << "\n" << command << "\n" << (s == command) << "\n";
-			if (s == command)
+			std::string s = msg.msgChain.toString();
+
+			for (int i = 0; i < config["triggers"].size(); i++)
 			{
-				//检测QPS
-				timelist.resize(config["max-QPS"].asInt(), 0);
-				time_t now = time(0);
-				for (int j = 0; j < timelist.size(); j++)
+				std::string command = config["triggers"][i].asString();
+				//std::cout << s << "\n" << command << "\n" << (s == command) << "\n";
+				if (s == command)
 				{
-					if (now - timelist[j] > 10 || timelist[j] == 0)//未达到QPS。此处改为10s时效，即QP10S
+					//检测QPS
+					timelist.resize(config["max-QPS"].asInt(), 0);
+					time_t now = time(0);
+					for (int j = 0; j < timelist.size(); j++)
 					{
-						timelist[j] = now;
-						break;
+						if (now - timelist[j] > 10 || timelist[j] == 0)//未达到QPS。此处改为10s时效，即QP10S
+						{
+							timelist[j] = now;
+							break;
+						}
+						else if (j == timelist.size() - 1)//搜索达到终点，已达到QPS
+						{
+							//发送消息
+							qqApi_ptr->sendMessage(msg.member, 0, u8"冲太快了啦");
+							std::cout << "Setu: " << u8"冲太快了啦" << "\n";
+							return;
+						}
 					}
-					else if (j == timelist.size() - 1)//搜索达到终点，已达到QPS
+
+					//发色图
+
+					//调用SelectSetu.py，返回相对路径的文件名，以换行分隔
+					std::string ans = SubProcess::popen("python data/plugins/Setu/SelectSetu.py");
+
+					if (ans.size())
 					{
+						//构造图片消息
+						auto imgfilelist = splitString(ans, "\n");
+						MessageChain mc;
+						for (auto imgfile : imgfilelist)
+						{
+							AMessage a;
+							a.type = AMessage::Image;
+							a.Image_path = config["ImgDir"].asString() + imgfile;
+
+							mc.chain.push_back(a);
+						}
+
 						//发送消息
-						qqApi_ptr->sendMessage(msg.member, 0, u8"冲太快了啦");
-						std::cout << "Setu: " << u8"冲太快了啦" << "\n";
-						return;
+						int msgid = qqApi_ptr->sendMessage(msg.member, 0, mc);
+						std::cout << "Setu: " << dumpsJson(mc.toJson(), false) << "\n";
+						addlog("send", msg.member, dumpsJson(mc.toJson(), false));
+
+						//撤回
+						if (config["recall"].asBool())
+						{
+							std::this_thread::sleep_for(std::chrono::seconds(config["recall-delay"].asInt()));
+
+							qqApi_ptr->recall(msgid);
+							std::cout << "Setu: recall: " << mc.toString() << "\n";
+						}
 					}
+
+					return;
 				}
-
-				//发色图
-
-				//调用SelectSetu.py，返回相对路径的文件名，以换行分隔
-				std::string ans = SubProcess::popen("python data/plugins/Setu/SelectSetu.py");
-
-				if (ans.size())
-				{
-					//构造图片消息
-					auto imgfilelist = splitString(ans, "\n");
-					MessageChain mc;
-					for (auto imgfile : imgfilelist)
-					{
-						AMessage a;
-						a.type = AMessage::Image;
-						a.Image_path = config["ImgDir"].asString() + imgfile;
-
-						mc.chain.push_back(a);
-					}
-
-					//发送消息
-					int msgid = qqApi_ptr->sendMessage(msg.member, 0, mc);
-					std::cout << "Setu: " << dumpsJson(mc.toJson(), false) << "\n";
-					addlog("send", msg.member, dumpsJson(mc.toJson(), false));
-
-					//撤回
-					if (config["recall"].asBool())
-					{
-						std::this_thread::sleep_for(std::chrono::seconds(config["recall-delay"].asInt()));
-
-						qqApi_ptr->recall(msgid);
-						std::cout << "Setu: recall: " << mc.toString() << "\n";
-					}
-				}
-
-				return ;
 			}
 		}
 	}
+	
 
 	//不是色图触发词，执行色图检测
 	//遍历消息链

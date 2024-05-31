@@ -1,5 +1,7 @@
 ﻿#include "Tex.h"
 
+#include <regex>
+
 #include "../SubProcess.h"
 
 Tex::Tex()
@@ -65,12 +67,27 @@ float Tex::metric(Message msg)
 void Tex::run(Message msg, QQApi* qqApi_ptr)
 {
 	std::string s = msg.msgChain.toString();
+	std::string command = s.substr(0, s.find_first_of("\r\n"));
 	std::string tex = s.substr(s.find_first_of("\r\n") + 1);
+
+	//替换换行为空格
+	tex = std::regex_replace(tex, std::regex("\n"), " ");
+
 	tex = utf8_to_ansi(tex);
 	//std::cout << tex << "\n";
 
-	//调用Tex2Image.py，传入tex，返回png路径
-	std::string ans = SubProcess::popen("python data/plugins/Tex/Tex2Image.py \"" + tex + "\"");
+	std::string ans;
+	if (command.substr(command.size() - 2) == "zh")
+	{
+		//调用Tex2Imagezh.py，传入tex，返回png路径
+		ans = SubProcess::popen("python data/plugins/Tex/Tex2Imagezh.py \"" + tex + "\"");
+	}
+	else
+	{
+		//调用Tex2Image.py，传入tex，返回png路径
+		ans = SubProcess::popen("python data/plugins/Tex/Tex2Image.py \"" + tex + "\"");
+
+	}
 
 	//构造图片消息
 	auto imgfilelist = splitString(ans, "\n");

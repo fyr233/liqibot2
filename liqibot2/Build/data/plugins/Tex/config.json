@@ -3,6 +3,8 @@
     "ImgDir": "data/net.mamoe.mirai-api-http/images/",
     "triggers": [
         "tex",
-        "latex"
+        "latex",
+        "texzh",
+        "latexzh"
         ]
 }

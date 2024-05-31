@@ -157,7 +157,7 @@ def Check_Baidu():
                 isSetu = True
                 break
     if not isSetu:
-        saveImg(imgurl, notsetufolderdir)
+        pass#saveImg(imgurl, notsetufolderdir)
 
 def Check_Tencent():
     pass

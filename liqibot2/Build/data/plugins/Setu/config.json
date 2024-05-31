@@ -1,6 +1,6 @@
 {
 	"ImgDir" : "data/net.mamoe.mirai-api-http/images/",
-	"active" : true,
+	"active" : false,
 	"max-QPS" : 6,
 	"recall" : false,
 	"recall-delay" : 180,

@@ -83,7 +83,7 @@ def calculate(filename, logfile, setulogfile, scoldlogfile, outpath):
     setutimelist = [os.path.getctime(setufolderdir + f) for f in setufilelist]
     setutimelist.sort()
     datelist = [time.strftime("%Y/%m/%d %H:%M:%S", time.localtime(t)) for t in setutimelist]
-    for i in range(len(datelist)):
+    for i in range(0, len(datelist), 1000):
         hisSetuInc_data['recv'].append([datelist[i], i])
 
     #今日色图贡献榜
@@ -170,7 +170,7 @@ def render(imgpath):
     cmd += ' --enable-local-file-access'
     cmd += ' --quality 40'
     cmd += ' '+htmlpath+' '+imgpath
-    p = subprocess.Popen(cmd, stdout = subprocess.PIPE, shell = True)
+    p = subprocess.Popen(cmd, stdout = subprocess.PIPE, stderr = subprocess.PIPE, shell = True)
     p.wait()
 
 

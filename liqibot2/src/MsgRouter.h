@@ -24,8 +24,8 @@ public:
 	Permission permission;
 
 private:
-
-	ThreadPool thread_pool = ThreadPool(2 * std::thread::hardware_concurrency());
+	const int thread_pool_size = 64;
+	ThreadPool thread_pool = ThreadPool(thread_pool_size);
 
 };
 

@@ -11,9 +11,11 @@ liqibot2/Build/liqibot2.ilk
 liqibot2/Build/liqibot2.pdb
 *.pyc
 *.log
+miraiOK_Release/
 miraiOK_Release/config/Console/AutoLogin.yml
 liqibot2/Build/liqibot2.pdb
 liqibot2/Build/data/plugins/Statistics/webpage/static/js/drawdata.js
 mcl-1.0.5/bots/2799314467/cache/servers.json
 mcl-1.0.5/bots/2799314467/cache/session.bin
 mcl-1.0.5/bots/2799314467/cache/servers.json
+mcl-2.1.2/

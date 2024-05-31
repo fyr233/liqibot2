@@ -9,10 +9,14 @@ output:
 
 import sys
 import requests
+from urllib.parse import quote
 import pyvips
 
+
+
+#知乎tex接口
+'''
 url = 'https://www.zhihu.com/equation'
-imgfolderdir = '../../mcl-1.0.5/data/net.mamoe.mirai-api-http/images/Tex/'
 
 headers = {
     'accept': 'image/avif,image/webp,image/apng,image/*,*/*;q=0.8',
@@ -25,11 +29,22 @@ data = {
     }
 
 r = requests.get(url, headers=headers, params=data)
+'''
 
+
+#i.upmath.me接口
+
+url = 'http://i.upmath.me/svg/'
+
+r = requests.get(url + quote(' '.join(sys.argv[1:])))
+
+
+#svg转png
+
+imgfolderdir = '../../mcl-1.0.5/data/net.mamoe.mirai-api-http/images/Tex/'
 filename = r.headers['Date'].replace(' ', '').replace(',', '').replace(':', '') + '.png'
 
-
-image = pyvips.Image.new_from_buffer(r.content, '', dpi=900)
+image = pyvips.Image.new_from_buffer(r.content, '', dpi=2000)
 background = image.new_from_image([255, 255, 255])
 background += 255
 background.composite(image, 'over').write_to_file(imgfolderdir + filename)

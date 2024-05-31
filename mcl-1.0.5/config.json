@@ -1,35 +1,45 @@
 {
-  "js_optimization_level": -1,
-  "mirai_repo": "https://gitee.com/peratx/mirai-repo/raw/master",
-  "maven_repo": "https://maven.aliyun.com/repository/public",
-  "packages": [
-    {
-      "id": "org.bouncycastle:bcprov-jdk15on",
+  "module_packages": [
+    "mcl:org.itxtech.mcl.module.builtin"
+  ],
+  "mirai_repo": "https://repo.itxtech.org",
+  "maven_repo": [
+    "https://maven.aliyun.com/repository/public"
+  ],
+  "packages": {
+    "net.mamoe:mirai-console": {
+      "channel": "stable",
+      "version": "2.10.3",
+      "type": "libs",
+      "versionLocked": false
+    },
+    "net.mamoe:mirai-console-terminal": {
+      "channel": "stable",
+      "version": "2.10.3",
+      "type": "libs",
+      "versionLocked": false
+    },
+    "net.mamoe:mirai-core-all": {
+      "channel": "stable",
+      "version": "2.10.3",
+      "type": "libs",
+      "versionLocked": false
+    },
+    "org.itxtech:mcl-addon": {
+      "channel": "c2001",
+      "version": "2.0.2",
+      "type": "plugins",
+      "versionLocked": false
+    },
+    "org.bouncycastle:bcprov-jdk15on": {
       "channel": "stable",
       "version": "1.64",
-      "type": "libs"
-    },
-    {
-      "id": "net.mamoe:mirai-console",
-      "channel": "beta",
-      "version": "2.7-M1",
-      "type": "libs"
-    },
-    {
-      "id": "net.mamoe:mirai-console-terminal",
-      "channel": "beta",
-      "version": "2.7-M1",
-      "type": "libs"
-    },
-    {
-      "id": "net.mamoe:mirai-core-all",
-      "channel": "beta",
-      "version": "2.7-M1",
-      "type": "libs"
+      "type": "libs",
+      "versionLocked": false
     }
-  ],
-  "disabled_scripts": [],
+  },
+  "disabled_modules": [],
   "proxy": "",
-  "log_level": 0,
-  "script_props": {}
+  "log_level": 1,
+  "modules_props": {}
 }
